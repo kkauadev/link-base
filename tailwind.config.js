@@ -17,6 +17,10 @@ module.exports = {
         primary: "var(--text-primary)",
         secondary: "var(--text-secondary)",
       },
+      borderColor: {
+        primary: "var(--border-primary)",
+        secondary: "var(--border-secondary)",
+      },
     },
   },
   plugins: [],
