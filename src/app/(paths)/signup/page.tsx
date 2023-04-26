@@ -1,18 +1,18 @@
+import { FormSignup } from "@/components/forms/form-signup";
 import Link from "next/link";
-import { FormLogin } from "../components/forms/form-login";
 
-export default function Home() {
+export default function SignUp() {
   return (
     <>
       <main className="w-full h-[96vh] flex justify-center items-center">
-        <FormLogin />
+        <FormSignup />
       </main>
       <footer className="flex justify-center items-center">
         <span>
           Feito com carinho por{" "}
           <Link
             className="text-secondary transition hover:underline"
-            href={"https://github.com/Kato2004"}
+            href={"/"}
             target="_blank"
           >
             Kauã

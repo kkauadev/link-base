@@ -1,7 +1,7 @@
+import { FormLogin } from "@/components/forms/form-login";
 import Link from "next/link";
-import { FormLogin } from "../components/forms/form-login";
 
-export default function Home() {
+export default function Login() {
   return (
     <>
       <main className="w-full h-[96vh] flex justify-center items-center">
@@ -11,7 +11,7 @@ export default function Home() {
         <span>
           Feito com carinho por{" "}
           <Link
-            className="text-secondary transition hover:underline"
+            className="text-secondary hover:underline"
             href={"https://github.com/Kato2004"}
             target="_blank"
           >
