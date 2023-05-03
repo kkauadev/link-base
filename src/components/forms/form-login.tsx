@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormInput } from "./form-input";
 
@@ -9,9 +10,26 @@ export const FormLogin = () => {
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const route = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form submitted");
+    await fetch("http://localhost:3333/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        localStorage.setItem(
+          "token",
+          JSON.stringify({ token: data.token, id: data.id })
+        );
+        route.push("/");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

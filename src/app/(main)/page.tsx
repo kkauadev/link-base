@@ -1,14 +1,36 @@
 "use client";
 
 import { FolderCard } from "@/components/cards/folder-card";
+import { getUserToken } from "@/functions/get-user-token";
+import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "../../functions/fetcher-data";
 
 export default function Home() {
   const [viewEditButton, setViewEditButton] = useState(false);
   const [viewDeleteButton, setViewDeleteButton] = useState(false);
 
   const router = useRouter();
+
+  const stored = getUserToken();
+
+  const url = stored && `http://localhost:3333/user/${stored.id}`;
+
+  const { data, isLoading, error } = useSWR(
+    url,
+    (url) => {
+      if (stored) {
+        return fetcher<User>(url, stored.token, {
+          method: "GET",
+        });
+      }
+    },
+    {
+      revalidateOnMount: true,
+    }
+  );
 
   return (
     <>
@@ -42,22 +64,15 @@ export default function Home() {
         </div>
       </section>
       <section className="flex flex-wrap gap-5">
-        <FolderCard
-          id="1"
-          title="sdadasdaaaaaaaaaaaaaaaaaaaaaasdasdas"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam suscipit magni exercitationem quod nisi asperiores laboriosam doloribus aspernatur ab saepe quam aliquam"
-          folderLink="#"
-          quantityOfLinks={10}
-          viewButtons={{ edit: viewEditButton, delete: viewDeleteButton }}
-        />
-        <FolderCard
-          id="2"
-          title="sdadasdaaaaaaaaaaaaaaaaaaaaaasdasdas"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam suscipit magni exercitationem quod nisi asperiores laboriosam doloribus aspernatur ab saepe quam aliquam"
-          folderLink="#"
-          quantityOfLinks={10}
-          viewButtons={{ edit: viewEditButton, delete: viewDeleteButton }}
-        />
+        {data?.folders?.map(({ id, name, description, links }) => (
+          <FolderCard
+            key={id}
+            data={{ id, name, description, quantityOfLinks: links.length }}
+            viewButtons={{ edit: viewEditButton, delete: viewDeleteButton }}
+          />
+        ))}
+        {isLoading && <p>Carregando...</p>}
+        {error && <p>Erro ao carregar</p>}
       </section>
     </>
   );

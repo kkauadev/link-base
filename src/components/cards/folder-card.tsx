@@ -1,5 +1,7 @@
 "use client";
 
+import { fetcher } from "@/functions/fetcher-data";
+import { getUserToken } from "@/functions/get-user-token";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -8,11 +10,12 @@ import {
 } from "react-icons/ai";
 
 interface FolderCardProps {
-  id: string;
-  title: string;
-  folderLink: string;
-  description: string;
-  quantityOfLinks?: number;
+  data: {
+    id: string;
+    name: string;
+    description: string;
+    quantityOfLinks?: number;
+  };
   viewButtons: {
     edit: boolean;
     delete: boolean;
@@ -20,21 +23,27 @@ interface FolderCardProps {
 }
 
 export const FolderCard = ({
-  id,
-  title,
-  folderLink,
-  description,
-  quantityOfLinks,
+  data: { id, name, description, quantityOfLinks },
   viewButtons,
 }: FolderCardProps) => {
   const router = useRouter();
+
+  const deleteFolder = async () => {
+    const stored = getUserToken();
+    if (!stored) return console.log("Não há token");
+    await fetcher(`http://localhost:3333/folders/delete/${id}`, stored.token, {
+      method: "DELETE",
+    }).then(() => {
+      router.refresh();
+    });
+  };
 
   return (
     <article className="relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
       <div className="absolute top-[-1rem] right-[-1rem]">
         {viewButtons.delete && (
           <button
-            onClick={() => router.refresh()}
+            onClick={() => deleteFolder()}
             className="w-8 h-8 flex justify-center items-center rounded-full  bg-red-600 transition hover:brightness-75"
           >
             <CloseIcon className="text-lg" />
@@ -50,19 +59,21 @@ export const FolderCard = ({
         )}
       </div>
       <Link
-        href={`/${folderLink}`}
+        href={`/folder/${id}`}
         className="text-xl font-bold text-secondary hover:underline"
       >
-        {title}
+        {name}
       </Link>
       <p>{description}</p>
-      {quantityOfLinks && (
-        <div className="mt-1">
+      <div className="mt-1 cursor-default">
+        {quantityOfLinks ? (
           <span className="text-zinc-400">
             Quantidade de links: {quantityOfLinks}
           </span>
-        </div>
-      )}
+        ) : (
+          <span className="text-zinc-400">Nenhum link adicionado</span>
+        )}
+      </div>
     </article>
   );
 };

@@ -1,17 +1,18 @@
 "use client";
 
-import { FormFolders } from "@/components/forms/form-folders";
+import { FormLink } from "@/components/forms/form-link";
 import { getUserToken } from "@/functions/get-user-token";
 
-export default function FolderCreate() {
+export default function FolderEdit() {
   const stored = getUserToken();
+
   return (
     <>
-      <h1 className="text-3xl">Crie uma nova pasta</h1>
+      <h1 className="text-3xl">Edite a pasta</h1>
       {stored && (
-        <FormFolders
+        <FormLink
           fetch={{
-            url: `http://localhost:3333/folders/create/${stored.id}`,
+            url: `http://localhost:3333/links/create/`,
             options: { method: "POST" },
             token: stored.token,
           }}

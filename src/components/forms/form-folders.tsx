@@ -1,27 +1,33 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { fetcher } from "@/functions/fetcher-data";
+import { useParams, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 interface FormFoldersProps {
   inputNameValue?: string;
   textareaDescriptionValue?: string;
-  fetchUrl: string;
-  fetchOptions: RequestInit;
+  fetch: {
+    url: string;
+    options: RequestInit;
+    token: string;
+  };
 }
 
 export const FormFolders = ({
   inputNameValue = "",
   textareaDescriptionValue = "",
-  fetchUrl,
-  fetchOptions,
+  fetch,
 }: FormFoldersProps) => {
   const [inputName, setInputName] = useState(inputNameValue);
   const [textareaDescription, setTextareaDescription] = useState(
     textareaDescriptionValue
   );
+  const [successMessage, setSuccessMessage] = useState(false);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
+  const { id } = useParams();
 
   const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextareaDescription(e.target.value);
@@ -33,6 +39,22 @@ export const FormFolders = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const body = JSON.stringify({
+      name: inputName,
+      description: textareaDescription,
+    });
+    const data = fetcher(fetch.url, fetch.token, {
+      ...fetch.options,
+      method: fetch.options.method,
+      body,
+    });
+    data.then(() => {
+      setSuccessMessage(true);
+      setTimeout(() => {
+        setSuccessMessage(false);
+        router.back();
+      }, 2000);
+    });
   };
 
   return (

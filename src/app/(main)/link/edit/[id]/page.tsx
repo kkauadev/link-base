@@ -1,9 +1,9 @@
 "use client";
 
-import { FormFolders } from "@/components/forms/form-folders";
+import { FormLink } from "@/components/forms/form-link";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
-import { Folder } from "@/types/user";
+import { Link } from "@/types/user";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 
@@ -11,10 +11,10 @@ export default function FolderEdit() {
   const { id } = useParams();
   const stored = getUserToken();
   const { data, error } = useSWR(
-    `http://localhost:3333/folder/${id}`,
+    `http://localhost:3333/links/${id}`,
     (url) => {
       if (stored) {
-        return fetcher<Folder>(url, stored.token, {
+        return fetcher<Link>(url, stored.token, {
           method: "GET",
         });
       }
@@ -28,13 +28,14 @@ export default function FolderEdit() {
     <>
       <h1 className="text-3xl">Edite a pasta</h1>
       {data && stored && (
-        <FormFolders
+        <FormLink
           fetch={{
-            url: `http://localhost:3333/folders/update/${id}`,
+            url: `http://localhost:3333/links/update/`,
             options: { method: "PUT" },
             token: stored.token,
           }}
-          inputNameValue={data.name}
+          inputTitleValue={data.title}
+          inputLinkValue={data.link}
           textareaDescriptionValue={data.description}
         />
       )}
