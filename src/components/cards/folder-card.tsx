@@ -31,10 +31,11 @@ export const FolderCard = ({
   const deleteFolder = async () => {
     const stored = getUserToken();
     if (!stored) return console.log("Não há token");
+    console.log(id);
     await fetcher(`http://localhost:3333/folders/delete/${id}`, stored.token, {
       method: "DELETE",
-    }).then(() => {
-      router.refresh();
+    }).then((data) => {
+      if (data) router.refresh();
     });
   };
 

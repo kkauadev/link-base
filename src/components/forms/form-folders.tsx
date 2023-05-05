@@ -98,7 +98,7 @@ export const FormFolders = ({
           Criar
         </button>
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
           className="w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-red-600"
         >
           Cancelar

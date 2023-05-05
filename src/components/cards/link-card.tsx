@@ -1,7 +1,12 @@
 "use client";
 
+import {
+  dateFormatter,
+  relativeDateFormatter,
+} from "@/functions/date-formatter";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
+import { Link as LinkType } from "@/types/user";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,13 +16,10 @@ import {
 } from "react-icons/ai";
 
 interface LinkCardProps {
-  title: string;
-  link: string;
-  description: string;
-  id: string;
+  link: LinkType;
 }
 
-export const LinkCard = ({ description, id, link, title }: LinkCardProps) => {
+export const LinkCard = ({ link }: LinkCardProps) => {
   const [viewDescription, setViewDescription] = useState(false);
   const [viewOptions, setViewOptions] = useState(false);
   const { refresh } = useRouter();
@@ -25,9 +27,13 @@ export const LinkCard = ({ description, id, link, title }: LinkCardProps) => {
   const deleteLink = async () => {
     const stored = getUserToken();
     if (!stored) return console.log("Não há token");
-    await fetcher(`http://localhost:3333/links/delete/${id}`, stored.token, {
-      method: "DELETE",
-    }).then(() => {
+    await fetcher(
+      `http://localhost:3333/links/delete/${link.id}`,
+      stored.token,
+      {
+        method: "DELETE",
+      }
+    ).then(() => {
       refresh();
     });
   };
@@ -35,7 +41,7 @@ export const LinkCard = ({ description, id, link, title }: LinkCardProps) => {
   return (
     <li className="w-full bg-tertiary p-4 rounded">
       <div className="flex justify-between items-center relative">
-        <h6 className="text-lg mb-2">{title}</h6>
+        <h6 className="text-lg mb-2">{link.title}</h6>
         <button
           onClick={() => setViewOptions((prev) => !prev)}
           className="text-3xl"
@@ -45,7 +51,7 @@ export const LinkCard = ({ description, id, link, title }: LinkCardProps) => {
         {viewOptions && (
           <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow">
             <li className="flex items-center gap-2">
-              <Link href={`/link/edit/${id}`}>
+              <Link href={`/link/edit/${link.id}` || "#"}>
                 <button>Editar</button>
               </Link>
             </li>
@@ -57,11 +63,22 @@ export const LinkCard = ({ description, id, link, title }: LinkCardProps) => {
       </div>
       <Link
         className="text-secondary underline brightness-125 hover:brightness-100"
-        href={link}
+        href={link.link || "#"}
       >
-        {link}
+        {link.link}
       </Link>
-      {viewDescription && <p className={` mt-1 `}>{description}</p>}
+      {viewDescription && (
+        <div className="flex flex-col gap-6">
+          <p className={` mt-1 `}>{link.description}</p>
+          <ul>
+            <li>Data de criação: {dateFormatter(new Date(link.createDate))}</li>
+            <li>
+              Data da última edição:{" "}
+              {relativeDateFormatter(new Date(link.updatedDate))}
+            </li>
+          </ul>
+        </div>
+      )}
       <button
         onClick={() => setViewDescription((prev) => !prev)}
         className="mt-2 flex gap-1 items-center py-1 "
