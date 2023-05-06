@@ -8,9 +8,7 @@ export default function FolderEdit() {
 
   return (
     <>
-      <h1 className="w-[calc(50vw-3.5rem)] text-3xl border border-white">
-        Edite a pasta
-      </h1>
+      <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Edite a pasta</h1>
       {stored && (
         <FormLink
           fetch={{

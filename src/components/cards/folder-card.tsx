@@ -1,7 +1,9 @@
 "use client";
 
+import { baseUrl } from "@/constants/base-url";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
+import { deleteItem } from "@/services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -26,7 +28,7 @@ export const FolderCard = ({
   data: { id, name, description, quantityOfLinks },
   viewButtons,
 }: FolderCardProps) => {
-  const router = useRouter();
+  const { refresh, push } = useRouter();
 
   const deleteFolder = async () => {
     const stored = getUserToken();
@@ -35,7 +37,13 @@ export const FolderCard = ({
     await fetcher(`http://localhost:3333/folders/delete/${id}`, stored.token, {
       method: "DELETE",
     }).then((data) => {
-      if (data) router.refresh();
+      if (data) refresh();
+    });
+  };
+
+  const deleteFolder = async () => {
+    await deleteItem(`${baseUrl}/folders/delete/${id}`).then((data) => {
+      if (data) refresh();
     });
   };
 
@@ -52,7 +60,7 @@ export const FolderCard = ({
         )}
         {viewButtons.edit && (
           <button
-            onClick={() => router.push(`/folder/edit/${id}`)}
+            onClick={() => push(`/folder/edit/${id}`)}
             className="w-8 h-8 flex justify-center items-center rounded-full bg-blue-600 transition hover:brightness-75"
           >
             <EditIcon className="text-lg" />

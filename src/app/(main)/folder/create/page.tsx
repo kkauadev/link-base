@@ -7,9 +7,7 @@ export default function FolderCreate() {
   const stored = getUserToken();
   return (
     <>
-      <h1 className="w-[calc(50vw-3.5rem)] text-3xl border border-white">
-        Crie uma nova pasta
-      </h1>
+      <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Crie uma nova pasta</h1>
       {stored && (
         <FormFolders
           fetch={{
