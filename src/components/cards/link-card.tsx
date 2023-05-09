@@ -8,7 +8,7 @@ import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { Link as LinkType } from "@/types/user";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 import {
   AiOutlineCaretDown as IconArrowDown,
@@ -23,6 +23,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
   const [viewDescription, setViewDescription] = useState(false);
   const [viewOptions, setViewOptions] = useState(false);
   const { refresh } = useRouter();
+  const { id } = useParams();
 
   const deleteLink = async () => {
     const stored = getUserToken();
@@ -39,24 +40,26 @@ export const LinkCard = ({ link }: LinkCardProps) => {
   };
 
   return (
-    <li className="w-full bg-tertiary p-4 rounded">
+    <li className="max-w-5xl w-full bg-tertiary p-4 rounded">
       <div className="flex justify-between items-center relative">
         <h6 className="text-lg mb-2">{link.title}</h6>
         <button
           onClick={() => setViewOptions((prev) => !prev)}
-          className="text-3xl"
+          className="text-white text-3xl"
         >
           <IconEllipsis />
         </button>
         {viewOptions && (
           <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow">
             <li className="flex items-center gap-2">
-              <Link href={`/link/edit/${link.id}` || "#"}>
-                <button>Editar</button>
+              <Link href={`/link/edit/${id}/${link.id}` || "#"}>
+                <button className="text-white">Editar</button>
               </Link>
             </li>
             <li className="flex items-center gap-2">
-              <button onClick={() => deleteLink()}>Excluir</button>
+              <button className="text-white" onClick={() => deleteLink()}>
+                Excluir
+              </button>
             </li>
           </ul>
         )}
@@ -81,7 +84,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
       )}
       <button
         onClick={() => setViewDescription((prev) => !prev)}
-        className="mt-2 flex gap-1 items-center py-1 "
+        className="text-white mt-2 flex gap-1 items-center py-1 "
       >
         <IconArrowDown className={`${viewDescription && "rotate-180"}`} />
         <span>Descrição</span>

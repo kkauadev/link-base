@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormInput } from "./form-input";
+import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
@@ -14,22 +15,27 @@ export const FormLogin = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch("http://localhost:3333/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        localStorage.setItem(
-          "token",
-          JSON.stringify({ token: data.token, id: data.id })
-        );
-        route.push("/");
-      })
-      .catch((err) => console.log(err));
+    console.log("q");
+    try {
+      const res = await fetch("http://localhost:3333/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      localStorage.setItem(
+        "token",
+        JSON.stringify({ token: data.token, id: data.id })
+      );
+      if (await checkUserAuthenticated()) {
+        return route.push("/");
+      }
+    } catch (e) {
+      console.log("as");
+    }
+    console.log("x");
   };
 
   return (
@@ -75,7 +81,7 @@ export const FormLogin = () => {
       <section>
         <div>
           <button
-            className="w-full bg-quaternary transition rounded-sm p-1 text-lg hover:brightness-75"
+            className="text-white w-full bg-quaternary transition rounded-sm p-1 text-lg hover:brightness-75"
             type="submit"
           >
             Entrar

@@ -4,12 +4,12 @@
 
 :root {
   --background-primary: #fff;
-  --background-secondary: #888;
-  --background-tertiary: #585858;
+  --background-secondary: #eee;
+  --background-tertiary: #ddd;
   --background-quaternary: #6298de;
-  --text-primary: #fff;
-  --text-secondary: #3065ac;
-  --border-primary: #888;
+  --text-primary: #000;
+  --text-secondary: #999;
+  --border-primary: #999;
   --border-secondary: #3065ac;
 }
 

@@ -35,17 +35,14 @@ export default function MainLayout({
     <>
       {!isPublicPage && (
         <PrivateRoute>
-          <header>
-            <nav className="absolute right-0 w-[50vw] flex items-center justify-end gap-8 py-6  px-14">
-              <Link
-                href="/"
-                className="text-white text-xl transition hover:brightness-75"
-              >
+          <header className="bg-secondary">
+            <nav className="w-full sm:absolute right-0 sm:w-[50vw] flex items-center justify-end gap-8 py-2 sm:py-6 px-4 sm:px-14">
+              <Link href="/" className="text-xl transition hover:brightness-75">
                 Home
               </Link>
               <button
                 onClick={() => setViewMenu((prev) => !prev)}
-                className="text-white text-3xl transition hover:brightness-75 hover:scale-75"
+                className="text-3xl transition hover:brightness-75 hover:scale-75"
               >
                 <IconMenu />
               </button>
@@ -56,13 +53,13 @@ export default function MainLayout({
                   } z-10 border-2 border-primary flex-col gap-4 absolute right-5 top-14 bg-secondary p-4 rounded-md`}
                 >
                   <Link
-                    className="text-white text-xl transition hover:brightness-75"
-                    href="/folder"
+                    className="text-xl transition hover:brightness-75"
+                    href="/"
                   >
                     Minhas pastas
                   </Link>
                   <Link
-                    className="text-white text-xl transition hover:brightness-75"
+                    className="text-xl transition hover:brightness-75"
                     href="/logout"
                   >
                     Sair
@@ -71,7 +68,7 @@ export default function MainLayout({
               }
             </nav>
           </header>
-          <main className="bg-secondary w-full px-14 py-8 pt-6 min-h-screen">
+          <main className="bg-secondary w-full px-4 sm:px-14 sm:py-8 min-h-screen">
             {children}
           </main>
         </PrivateRoute>

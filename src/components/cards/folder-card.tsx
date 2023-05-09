@@ -31,18 +31,7 @@ export const FolderCard = ({
   const { refresh, push } = useRouter();
 
   const deleteFolder = async () => {
-    const stored = getUserToken();
-    if (!stored) return console.log("Não há token");
-    console.log(id);
-    await fetcher(`http://localhost:3333/folders/delete/${id}`, stored.token, {
-      method: "DELETE",
-    }).then((data) => {
-      if (data) refresh();
-    });
-  };
-
-  const deleteFolder = async () => {
-    await deleteItem(`${baseUrl}/folders/delete/${id}`).then((data) => {
+    await deleteItem({ id, type: "folders" }).then((data) => {
       if (data) refresh();
     });
   };
@@ -53,7 +42,7 @@ export const FolderCard = ({
         {viewButtons.delete && (
           <button
             onClick={() => deleteFolder()}
-            className="w-8 h-8 flex justify-center items-center rounded-full  bg-red-600 transition hover:brightness-75"
+            className="text-white w-8 h-8 flex justify-center items-center rounded-full  bg-red-600 transition hover:brightness-75"
           >
             <CloseIcon className="text-lg" />
           </button>
@@ -61,7 +50,7 @@ export const FolderCard = ({
         {viewButtons.edit && (
           <button
             onClick={() => push(`/folder/edit/${id}`)}
-            className="w-8 h-8 flex justify-center items-center rounded-full bg-blue-600 transition hover:brightness-75"
+            className="text-white w-8 h-8 flex justify-center items-center rounded-full bg-blue-600 transition hover:brightness-75"
           >
             <EditIcon className="text-lg" />
           </button>

@@ -77,7 +77,7 @@ export const FormSignup = () => {
       <section>
         <div>
           <button
-            className="w-full bg-green-600 transition rounded-sm p-1 text-lg hover:brightness-50"
+            className="text-white w-full bg-green-600 transition rounded-sm p-1 text-lg hover:brightness-50"
             type="submit"
           >
             Cadastrar

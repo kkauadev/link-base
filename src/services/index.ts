@@ -1,16 +1,18 @@
+import { baseUrl } from "@/constants/base-url";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 
-export const deleteItem = async (id: string) => {
+interface IDeleteItem {
+  id: string;
+  type: "folders" | "links";
+}
+
+export const deleteItem = async ({ id, type }: IDeleteItem) => {
   const stored = getUserToken();
   if (!stored) return console.log("Não há token");
-  return await fetcher(
-    `http://localhost:3333/folders/delete/${id}`,
-    stored.token,
-    {
-      method: "DELETE",
-    }
-  );
+  return await fetcher(`${baseUrl}/${type}/delete/${id}`, stored.token, {
+    method: "DELETE",
+  });
 };
 
 export const getData = <T>(url: string) => {

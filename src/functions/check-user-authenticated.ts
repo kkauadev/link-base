@@ -3,16 +3,21 @@ export const checkUserAuthenticated = async () => {
   const { token, id } = JSON.parse(storedToken ?? "{}");
 
   try {
+    if (!token || !id) {
+      throw new Error("Authentication check failed");
+    }
     const res = await fetch(`http://localhost:3333/user/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
+
     if (res.ok) {
       return true;
+    } else {
+      throw new Error("Authentication check failed");
     }
-    throw new Error("Authentication check failed");
   } catch (e) {
     return false;
   }

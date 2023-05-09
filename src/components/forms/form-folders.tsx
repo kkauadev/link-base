@@ -26,7 +26,7 @@ export const FormFolders = ({
   const [successMessage, setSuccessMessage] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const router = useRouter();
+  const { push } = useRouter();
   const { id } = useParams();
 
   const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -52,7 +52,7 @@ export const FormFolders = ({
       setSuccessMessage(true);
       setTimeout(() => {
         setSuccessMessage(false);
-        router.back();
+        push("/");
       }, 2000);
     });
   };
@@ -92,14 +92,14 @@ export const FormFolders = ({
       </div>
       <div className="flex gap-4 mt-5">
         <button
-          className="w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
+          className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
           type="submit"
         >
           Criar
         </button>
         <button
-          onClick={() => router.back()}
-          className="w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-red-600"
+          onClick={() => push("/")}
+          className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-red-600"
         >
           Cancelar
         </button>
