@@ -7,6 +7,11 @@ import { FormInput } from "./form-input";
 import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 import Cookies from "js-cookie";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
+import { fetcherUser } from "@/functions/fetcher-data";
+
+export interface CustomError extends Error {
+  message: string;
+}
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
@@ -22,12 +27,11 @@ export const FormLogin = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3333/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+      if (!username || !password) throw new Error("Preencha todos os campos");
+
+      const res = await fetcherUser("http://localhost:3333/login", {
+        username,
+        password,
       });
 
       if (!res.ok) {
@@ -35,15 +39,18 @@ export const FormLogin = () => {
       }
 
       const data = await res.json();
+
       Cookies.set("token", data.token);
       Cookies.set("id", data.id);
+
       if (await checkUserAuthenticated()) {
         return route.push("/");
       }
     } catch (error) {
+      const customError: CustomError = error as CustomError;
       setError({
         error: true,
-        message: "Usuário ou senha incorretos",
+        message: customError.message || "Usuário ou senha incorretos",
       });
     }
   };
