@@ -5,17 +5,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormInput } from "./form-input";
 import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
+import Cookies from "js-cookie";
+import { AiOutlineClose as IconClose } from "react-icons/ai";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
+  const [error, setError] = useState({
+    error: false,
+    message: "",
+  });
 
   const route = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("q");
     try {
       const res = await fetch("http://localhost:3333/login", {
         method: "POST",
@@ -24,18 +29,23 @@ export const FormLogin = () => {
         },
         body: JSON.stringify({ username, password }),
       });
+
+      if (!res.ok) {
+        throw new Error("Erro na solicitação. Status: " + res.status);
+      }
+
       const data = await res.json();
-      localStorage.setItem(
-        "token",
-        JSON.stringify({ token: data.token, id: data.id })
-      );
+      Cookies.set("token", data.token);
+      Cookies.set("id", data.id);
       if (await checkUserAuthenticated()) {
         return route.push("/");
       }
-    } catch (e) {
-      console.log("as");
+    } catch (error) {
+      setError({
+        error: true,
+        message: "Usuário ou senha incorretos",
+      });
     }
-    console.log("x");
   };
 
   return (
@@ -44,6 +54,18 @@ export const FormLogin = () => {
       className="w-full max-w-lg bg-secondary p-10 pb-6 rounded"
     >
       <section className="flex flex-col gap-2 mb-2">
+        {error.error && (
+          <aside className="relative bg-red-400 p-4 flex justify-center items-center rounded">
+            <span className="text-red-900 text-lg">{error.message}</span>
+            <button
+              onClick={() => setError({ error: false, message: "" })}
+              className="absolute right-[4%] text-red-900 text-lg hover:text-red-600 transition"
+            >
+              <IconClose />
+            </button>
+          </aside>
+        )}
+
         <div className="flex flex-col">
           <label htmlFor="username-input">Usuário</label>
           <FormInput

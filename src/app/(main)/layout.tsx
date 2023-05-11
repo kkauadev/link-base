@@ -3,14 +3,13 @@
 import { PrivateRoute } from "@/components/private/PrivateRoute";
 import { checkIsPublicRoute } from "@/functions/check-public-route";
 import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
 
 export default function MainLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {

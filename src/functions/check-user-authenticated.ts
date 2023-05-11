@@ -1,6 +1,8 @@
+import Cookies from "js-cookie";
+
 export const checkUserAuthenticated = async () => {
-  const storedToken = localStorage.getItem("token");
-  const { token, id } = JSON.parse(storedToken ?? "{}");
+  const token = Cookies.get("token");
+  const id = Cookies.get("id");
 
   try {
     if (!token || !id) {
