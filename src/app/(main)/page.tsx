@@ -6,26 +6,25 @@ import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
-import { fetcher } from "../../functions/fetcher-data";
-import { PageTitle } from "../../components/layouts/title-page";
+import { baseUrl } from "@/constants/base-url";
+import { fetcher } from "@/functions/fetcher-data";
+import { PageTitle } from "@/components/layouts/title-page";
 
 export default function Home() {
   const [viewEditButton, setViewEditButton] = useState(false);
   const [viewDeleteButton, setViewDeleteButton] = useState(false);
 
-  const router = useRouter();
+  const { push } = useRouter();
 
   const stored = getUserToken();
 
-  const url = stored && `http://localhost:3333/user/${stored.id}`;
-
   const { data, isLoading, error } = useSWR(
-    url,
-    (url) => {
+    stored && `${baseUrl}/user/${stored.id}`,
+    async (url) => {
       if (stored) {
-        return fetcher<User>(url, stored.token, {
+        return (await fetcher(url, stored.token, {
           method: "GET",
-        });
+        }).then((res) => res.json())) as User;
       }
     },
     {
@@ -39,7 +38,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 mt-10 mb-5">
         <div className="flex gap-4">
           <button
-            onClick={() => router.push("/folder/create")}
+            onClick={() => push("/folder/create")}
             className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
           >
             Adicionar

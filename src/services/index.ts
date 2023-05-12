@@ -15,12 +15,12 @@ export const deleteItem = async ({ id, type }: IDeleteItem) => {
   });
 };
 
-export const getData = <T>(url: string) => {
+export const getData = async <T>(url: string) => {
   const stored = getUserToken();
 
   if (stored) {
-    return fetcher<T>(url, stored.token, {
+    return (await fetcher(url, stored.token, {
       method: "GET",
-    });
+    })) as T;
   }
 };

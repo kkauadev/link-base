@@ -12,11 +12,11 @@ export default function FolderEdit() {
   const stored = getUserToken();
   const { data, error } = useSWR(
     `http://localhost:3333/links/${id}`,
-    (url) => {
+    async (url) => {
       if (stored) {
-        return fetcher<Link>(url, stored.token, {
+        return (await fetcher(url, stored.token, {
           method: "GET",
-        });
+        }).then((res) => res.json())) as Link;
       }
     },
     {
