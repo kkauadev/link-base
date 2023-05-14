@@ -1,5 +1,6 @@
 "use client";
 
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +9,7 @@ export default function LogoutPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    localStorage.removeItem("token");
+    Cookies.remove("token");
     push("/login");
   };
   return (

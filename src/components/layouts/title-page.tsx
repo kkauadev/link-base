@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export const PageTitle = ({ title }: { title: string }) => {
   return (
     <>

@@ -1,14 +1,14 @@
 "use client";
 
 import { FolderCard } from "@/components/cards/folder-card";
+import { PageTitle } from "@/components/layouts/title-page";
+import { baseUrl } from "@/constants/base-url";
+import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
-import { baseUrl } from "@/constants/base-url";
-import { fetcher } from "@/functions/fetcher-data";
-import { PageTitle } from "@/components/layouts/title-page";
 
 export default function Home() {
   const [viewEditButton, setViewEditButton] = useState(false);

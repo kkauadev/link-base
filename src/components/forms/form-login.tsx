@@ -2,13 +2,13 @@
 
 import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 import { fetcherUser } from "@/functions/fetcher-data";
+import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
-import { CustomError } from "@/types/custom-error";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");

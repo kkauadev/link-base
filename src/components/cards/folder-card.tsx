@@ -1,8 +1,5 @@
 "use client";
 
-import { baseUrl } from "@/constants/base-url";
-import { fetcher } from "@/functions/fetcher-data";
-import { getUserToken } from "@/functions/get-user-token";
 import { deleteItem } from "@/services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

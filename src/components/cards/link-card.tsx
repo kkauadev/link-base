@@ -8,7 +8,7 @@ import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { Link as LinkType } from "@/types/user";
 import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   AiOutlineCaretDown as IconArrowDown,

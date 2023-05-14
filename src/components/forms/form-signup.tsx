@@ -1,12 +1,12 @@
 "use client";
 
 import { fetcherUser } from "@/functions/fetcher-data";
+import { CustomError } from "@/types/custom-error";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
-import { CustomError } from "@/types/custom-error";
 
 export const FormSignup = () => {
   const [username, setUsername] = useState("");

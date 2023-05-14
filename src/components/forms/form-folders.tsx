@@ -2,7 +2,7 @@
 
 import { fetcher } from "@/functions/fetcher-data";
 import { CustomError } from "@/types/custom-error";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 interface FormFoldersProps {
