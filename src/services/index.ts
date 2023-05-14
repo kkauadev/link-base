@@ -21,6 +21,6 @@ export const getData = async <T>(url: string) => {
   if (stored) {
     return (await fetcher(url, stored.token, {
       method: "GET",
-    })) as T;
+    }).then((res) => res.json())) as T;
   }
 };

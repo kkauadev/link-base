@@ -55,7 +55,7 @@ export const FormLogin = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-lg bg-secondary p-10 pb-6 rounded"
+      className="bg-inherit sm:bg-secondary w-full max-w-lg p-6 sm:p-10 pb-6 rounded"
     >
       <section className="flex flex-col gap-2 mb-2">
         {error.error && (

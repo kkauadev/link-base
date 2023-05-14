@@ -34,6 +34,7 @@ export default function FolderEdit() {
             options: { method: "PUT" },
             token: stored.token,
           }}
+          finishBtnText="Editar"
           inputNameValue={data.name}
           textareaDescriptionValue={data.description}
         />

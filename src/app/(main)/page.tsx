@@ -36,10 +36,10 @@ export default function Home() {
     <>
       <PageTitle title="Minhas pastas" />
       <section className="flex flex-col gap-4 mt-10 mb-5">
-        <div className="flex gap-4">
+        <div className="text-sm sm:text-base flex gap-4">
           <button
             onClick={() => push("/folder/create")}
-            className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
+            className="h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-green-600"
           >
             Adicionar
           </button>
@@ -51,7 +51,7 @@ export default function Home() {
             disabled={data?.folders.length === 0}
             className={`${
               data?.folders.length === 0 && "opacity-50 cursor-not-allowed"
-            } text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-blue-600`}
+            } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-blue-600`}
           >
             Editar
           </button>
@@ -63,30 +63,32 @@ export default function Home() {
             disabled={data?.folders.length === 0}
             className={`${
               data?.folders.length === 0 && "opacity-50 cursor-not-allowed"
-            } text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-red-600`}
+            } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-red-600`}
           >
             Excluir
           </button>
         </div>
-        {data?.folders.length != 0 ? (
-          data?.folders?.map(({ id, name, description, links }) => (
-            <FolderCard
-              key={id}
-              data={{
-                id,
-                name,
-                description,
-                quantityOfLinks: links.length,
-              }}
-              viewButtons={{
-                edit: viewEditButton,
-                delete: viewDeleteButton,
-              }}
-            />
-          ))
-        ) : (
-          <p>Ainda não existe nenhuma página</p>
-        )}
+        <div className="flex flex-wrap gap-4">
+          {data?.folders.length != 0 ? (
+            data?.folders?.map(({ id, name, description, links }) => (
+              <FolderCard
+                key={id}
+                data={{
+                  id,
+                  name,
+                  description,
+                  quantityOfLinks: links.length,
+                }}
+                viewButtons={{
+                  edit: viewEditButton,
+                  delete: viewDeleteButton,
+                }}
+              />
+            ))
+          ) : (
+            <p>Ainda não existe nenhuma página</p>
+          )}
+        </div>
 
         {error && <p>Erro ao carregar</p>}
       </section>

@@ -35,8 +35,11 @@ export default function MainLayout({
       {!isPublicPage && (
         <PrivateRoute>
           <header className="bg-secondary">
-            <nav className="w-full sm:absolute right-0 sm:w-[50vw] flex items-center justify-end gap-8 py-2 sm:py-6 px-4 sm:px-14">
-              <Link href="/" className="text-xl transition hover:brightness-75">
+            <nav className="w-full sm:absolute right-0 sm:w-[50vw] flex items-center justify-end gap-4 sm:gap-8 pt-4 pb-2 sm:py-6 px-4 sm:px-14">
+              <Link
+                href="/"
+                className="text-lg sm:text-xl transition hover:brightness-75"
+              >
                 Home
               </Link>
               <button
@@ -67,7 +70,7 @@ export default function MainLayout({
               }
             </nav>
           </header>
-          <main className="bg-secondary w-full px-4 sm:px-14 sm:py-8 min-h-screen">
+          <main className="bg-secondary w-full px-4 py-2 sm:px-14 sm:py-8 min-h-screen">
             {children}
           </main>
         </PrivateRoute>

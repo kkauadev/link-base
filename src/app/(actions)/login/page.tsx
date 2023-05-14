@@ -1,13 +1,18 @@
 import { FormLogin } from "@/components/forms/form-login";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Link Base - Login",
+};
 
 export default function Login() {
   return (
     <>
-      <main className="w-full h-[96vh] flex justify-center items-center">
+      <main className="bg-primary sm:bg-inherit w-full h-[96vh] flex justify-center items-center">
         <FormLogin />
       </main>
-      <footer className="flex justify-center items-center">
+      <footer className="bg-primary sm:bg-inherit flex justify-center items-center">
         <span>
           Feito com carinho por{" "}
           <Link

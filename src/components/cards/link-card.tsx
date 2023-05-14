@@ -71,8 +71,8 @@ export const LinkCard = ({ link }: LinkCardProps) => {
         {link.link}
       </Link>
       {viewDescription && (
-        <div className="flex flex-col gap-6">
-          <p className={` mt-1 `}>{link.description}</p>
+        <div className="flex flex-col gap-6 text-sm sm:text-base">
+          <p className={`break-words mt-1 `}>{link.description}</p>
           <ul>
             <li>Data de criação: {dateFormatter(new Date(link.createDate))}</li>
             <li>
@@ -84,7 +84,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
       )}
       <button
         onClick={() => setViewDescription((prev) => !prev)}
-        className="text-white mt-2 flex gap-1 items-center py-1 "
+        className="text-sm sm:text-base text-white mt-2 flex gap-1 items-center py-1 "
       >
         <IconArrowDown className={`${viewDescription && "rotate-180"}`} />
         <span>Descrição</span>

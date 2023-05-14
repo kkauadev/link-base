@@ -10,6 +10,7 @@ export default function FolderCreate() {
       <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Crie uma nova pasta</h1>
       {stored && (
         <FormFolders
+          finishBtnText="Adicionar"
           fetch={{
             url: `http://localhost:3333/folders/create/${stored.id}`,
             options: { method: "POST" },

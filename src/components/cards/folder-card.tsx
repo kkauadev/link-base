@@ -37,7 +37,7 @@ export const FolderCard = ({
   };
 
   return (
-    <article className="relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
+    <article className="break-words relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
       <div className="absolute top-[-1rem] right-[-1rem]">
         {viewButtons.delete && (
           <button
@@ -63,7 +63,7 @@ export const FolderCard = ({
         {name}
       </Link>
       <p>{description}</p>
-      <div className="mt-1 cursor-default">
+      <div className="text-sm sm:text-base  mt-1 cursor-default">
         {quantityOfLinks ? (
           <span className="text-zinc-400">
             Quantidade de links: {quantityOfLinks}

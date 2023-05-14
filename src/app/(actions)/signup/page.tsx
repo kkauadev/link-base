@@ -1,5 +1,10 @@
 import { FormSignup } from "@/components/forms/form-signup";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Link Base - Sign up",
+};
 
 export default function SignUp() {
   return (

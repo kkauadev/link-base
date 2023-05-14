@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 interface FormFoldersProps {
   inputNameValue?: string;
   textareaDescriptionValue?: string;
+  finishBtnText: "Editar" | "Adicionar";
   fetch: {
     url: string;
     options: RequestInit;
@@ -18,6 +19,7 @@ interface FormFoldersProps {
 export const FormFolders = ({
   inputNameValue = "",
   textareaDescriptionValue = "",
+  finishBtnText,
   fetch,
 }: FormFoldersProps) => {
   const [inputName, setInputName] = useState(inputNameValue);
@@ -114,7 +116,7 @@ export const FormFolders = ({
             className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
             type="submit"
           >
-            Criar
+            {finishBtnText}
           </button>
           <button
             onClick={() => push("/")}
