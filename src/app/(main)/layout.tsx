@@ -1,15 +1,13 @@
 "use client";
 
-import { PrivateRoute } from "@/components/private/PrivateRoute";
 import { baseUrl } from "@/constants/base-url";
-import { checkIsPublicRoute } from "@/functions/check-public-route";
 import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 import { getUserToken } from "@/functions/get-user-token";
 import { getData } from "@/services";
 import { User } from "@/types/user";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
 import useSWR from "swr";
 
@@ -25,13 +23,9 @@ export default function MainLayout({
   const pathname = usePathname();
   const stored = getUserToken();
 
-  const { data, isLoading, error } = useSWR(
-    `${baseUrl}/user/${stored?.id}`,
-    getData<User>,
-    {
-      revalidateOnMount: true,
-    }
-  );
+  const { data } = useSWR(`${baseUrl}/user/${stored?.id}`, getData<User>, {
+    revalidateOnMount: true,
+  });
 
   const verifyUserAuthenticated = useCallback(async () => {
     if ((await checkUserAuthenticated()) === false) {
@@ -39,15 +33,10 @@ export default function MainLayout({
     }
   }, [push]);
 
-  useEffect(() => {
-    verifyUserAuthenticated();
-    setIsPublicPage(checkIsPublicRoute(pathname!));
-  }, [verifyUserAuthenticated, pathname]);
-
   return (
     <>
       {!isPublicPage && (
-        <PrivateRoute>
+        <>
           <header className="bg-secondary">
             <nav className="w-full sm:absolute right-0 sm:w-[50vw] flex items-center justify-end gap-4 sm:gap-8 pt-4 pb-2 sm:py-6 px-4 sm:px-14">
               <Link
@@ -93,7 +82,7 @@ export default function MainLayout({
           <main className="bg-secondary w-full px-4 py-2 sm:px-14 sm:py-8 min-h-screen">
             {children}
           </main>
-        </PrivateRoute>
+        </>
       )}
     </>
   );

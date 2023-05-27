@@ -1,13 +1,14 @@
 "use client";
 
 import { FolderCard } from "@/components/cards/folder-card";
+import { loadingCards } from "@/components/cards/loading-cards";
 import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 
 export default function Home() {
@@ -31,19 +32,6 @@ export default function Home() {
       revalidateOnMount: true,
     }
   );
-
-  const loadingCards = () => {
-    const cards = [];
-    for (let i = 0; i < 3; i++) {
-      cards.push(
-        <div
-          key={i}
-          className="w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] h-28 rounded bg-tertiary animate-pulse"
-        />
-      );
-    }
-    return cards;
-  };
 
   return (
     <>

@@ -1,6 +1,8 @@
 "use client";
 
 import { LinkCard } from "@/components/cards/link-card";
+import { loadingCards } from "@/components/cards/loading-cards";
+import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
@@ -15,7 +17,6 @@ import {
   AiOutlinePlus as IconPlus,
 } from "react-icons/ai";
 import useSWR from "swr";
-import { PageTitle } from "../../../../components/layouts/title-page";
 
 export default function FolderPage() {
   const { id } = useParams();
@@ -24,19 +25,6 @@ export default function FolderPage() {
   const { data, error } = useSWR(`${baseUrl}/folder/${id}`, getData<Folder>, {
     revalidateOnMount: true,
   });
-
-  const loadingCards = () => {
-    const cards = [];
-    for (let i = 0; i < 3; i++) {
-      cards.push(
-        <li
-          key={i}
-          className="h-28 max-w-5xl w-full bg-tertiary p-4 rounded animate-pulse"
-        />
-      );
-    }
-    return cards;
-  };
 
   const deleteFolder = async () => {
     await deleteItem({ id, type: "folders" }).then((data) => {

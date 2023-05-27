@@ -1,6 +1,7 @@
 "use client";
 
 import { FormLink } from "@/components/forms/form-link";
+import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
 
 export default function FolderEdit() {
@@ -12,7 +13,7 @@ export default function FolderEdit() {
       {stored && (
         <FormLink
           fetch={{
-            url: `http://localhost:3333/links/create/`,
+            url: `${baseUrl}/links/create/`,
             options: { method: "POST" },
             token: stored.token,
           }}

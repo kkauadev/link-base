@@ -1,6 +1,5 @@
 "use client";
 
-import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 import { fetcherUser } from "@/functions/fetcher-data";
 import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
 import { baseUrl } from "@/constants/base-url";
+import { checkUserAuthenticated } from "@/functions/check-user-authenticated";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
@@ -41,9 +41,7 @@ export const FormLogin = () => {
       Cookies.set("token", data.token);
       Cookies.set("id", data.id);
 
-      if (await checkUserAuthenticated()) {
-        return route.push("/");
-      }
+      return route.push("/");
     } catch (error) {
       const customError: CustomError = error as CustomError;
       setError({

@@ -1,6 +1,7 @@
 "use client";
 
 import { FormFolders } from "@/components/forms/form-folders";
+import { baseUrl } from "@/constants/base-url";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { Folder } from "@/types/user";
@@ -10,8 +11,9 @@ import useSWR from "swr";
 export default function FolderEdit() {
   const { id } = useParams();
   const stored = getUserToken();
-  const { data, error } = useSWR(
-    `http://localhost:3333/folder/${id}`,
+
+  const { data } = useSWR(
+    `${baseUrl}/folder/${id}`,
     async (url) => {
       if (stored) {
         return (await fetcher(url, stored.token, {
@@ -30,7 +32,7 @@ export default function FolderEdit() {
       {data && stored && (
         <FormFolders
           fetch={{
-            url: `http://localhost:3333/folders/update/${id}`,
+            url: `${baseUrl}/folders/update/${id}`,
             options: { method: "PUT" },
             token: stored.token,
           }}

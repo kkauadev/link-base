@@ -1,6 +1,7 @@
 "use client";
 
 import { FormLink } from "@/components/forms/form-link";
+import { baseUrl } from "@/constants/base-url";
 import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { Link } from "@/types/user";
@@ -10,8 +11,8 @@ import useSWR from "swr";
 export default function FolderEdit() {
   const { id } = useParams();
   const stored = getUserToken();
-  const { data, error } = useSWR(
-    `http://localhost:3333/links/${id}`,
+  const { data } = useSWR(
+    `${baseUrl}/links/${id}`,
     async (url) => {
       if (stored) {
         return (await fetcher(url, stored.token, {
@@ -30,7 +31,7 @@ export default function FolderEdit() {
       {data && stored && (
         <FormLink
           fetch={{
-            url: `http://localhost:3333/links/update/`,
+            url: `${baseUrl}/links/update/`,
             options: { method: "PUT" },
             token: stored.token,
           }}

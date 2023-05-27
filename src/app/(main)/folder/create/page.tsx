@@ -1,6 +1,7 @@
 "use client";
 
 import { FormFolders } from "@/components/forms/form-folders";
+import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
 
 export default function FolderCreate() {
@@ -12,7 +13,7 @@ export default function FolderCreate() {
         <FormFolders
           finishBtnText="Adicionar"
           fetch={{
-            url: `http://localhost:3333/folders/create/${stored.id}`,
+            url: `${baseUrl}/folders/create/${stored.id}`,
             options: { method: "POST" },
             token: stored.token,
           }}
