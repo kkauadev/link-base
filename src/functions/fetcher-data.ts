@@ -1,15 +1,15 @@
-export const fetcher = async (
-  url: string,
-  token: string,
-  options: RequestInit
-) =>
-  await fetch(url, {
+import Cookies from "js-cookie";
+
+export const fetcher = async (url: string, options: RequestInit) => {
+  const token = Cookies.get("token");
+  return await fetch(url, {
     ...options,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
+};
 
 export const fetcherUser = async (url: string, requestBody: object) => {
   return await fetch(url, {
