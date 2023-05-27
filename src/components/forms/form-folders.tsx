@@ -4,6 +4,7 @@ import { fetcher } from "@/functions/fetcher-data";
 import { CustomError } from "@/types/custom-error";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { AiOutlineClose as IconClose } from "react-icons/ai";
 
 interface FormFoldersProps {
   inputNameValue?: string;
@@ -26,6 +27,10 @@ export const FormFolders = ({
   const [textareaDescription, setTextareaDescription] = useState(
     textareaDescriptionValue
   );
+  const [errorMessage, setErrorMessage] = useState({
+    message: "",
+    show: false,
+  });
   const [successMessage, setSuccessMessage] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -68,7 +73,10 @@ export const FormFolders = ({
       });
     } catch (error) {
       const customError: CustomError = error as CustomError;
-      console.log(customError.message);
+      setErrorMessage({
+        message: customError.message,
+        show: true,
+      });
     }
   };
 
@@ -77,6 +85,21 @@ export const FormFolders = ({
       {successMessage && (
         <aside className="bg-green-400 text-xl rounded p-3 absolute top-16 left-[35%] right-[35%]">
           Sucesso na ação, redirecionando...
+        </aside>
+      )}
+      {errorMessage.show && (
+        <aside className="flex justify-center bg-red-400 text-xl rounded p-3 absolute top-16 left-[35%] right-[35%]">
+          <span>{errorMessage.message}</span>
+          <button
+            onClick={() =>
+              setErrorMessage({
+                message: "",
+                show: false,
+              })
+            }
+          >
+            <IconClose />
+          </button>
         </aside>
       )}
       <form

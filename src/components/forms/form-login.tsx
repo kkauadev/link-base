@@ -6,9 +6,10 @@ import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
+import { baseUrl } from "@/constants/base-url";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
@@ -26,7 +27,7 @@ export const FormLogin = () => {
     try {
       if (!username || !password) throw new Error("Preencha todos os campos");
 
-      const res = await fetcherUser("http://localhost:3333/login", {
+      const res = await fetcherUser(`${baseUrl}/login`, {
         username,
         password,
       });

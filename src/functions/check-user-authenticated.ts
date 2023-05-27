@@ -1,3 +1,4 @@
+import { baseUrl } from "@/constants/base-url";
 import Cookies from "js-cookie";
 
 export const checkUserAuthenticated = async () => {
@@ -8,7 +9,7 @@ export const checkUserAuthenticated = async () => {
     if (!token || !id) {
       throw new Error("Authentication check failed");
     }
-    const res = await fetch(`http://localhost:3333/user/${id}`, {
+    const res = await fetch(`${baseUrl}/user/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

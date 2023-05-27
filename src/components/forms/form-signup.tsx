@@ -1,12 +1,13 @@
 "use client";
 
-import { fetcherUser } from "@/functions/fetcher-data";
+import { createUser, fetcherUser } from "@/functions/fetcher-data";
 import { CustomError } from "@/types/custom-error";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
+import { baseUrl } from "@/constants/base-url";
 
 export const FormSignup = () => {
   const [username, setUsername] = useState("");
@@ -29,7 +30,17 @@ export const FormSignup = () => {
       if (password !== confirmPassword)
         throw new Error("As senhas não coincidem");
 
-      const res = await fetcherUser("http://localhost:3333/user/create", {
+      // const res = await fetch("http://localhost:3333/user/create", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     name: username,
+      //     password,
+      //   }),
+      // });
+      const res = await createUser(`${baseUrl}/user/create`, {
         name: username,
         password,
       });
@@ -53,6 +64,17 @@ export const FormSignup = () => {
       onSubmit={handleSubmit}
       className="w-full max-w-lg bg-secondary p-10 pb-6 rounded"
     >
+      <h1 className="text-3xl text-center mb-4">Criar conta</h1>
+      <section className="bg-blue-200 text-blue-900 py-4 px-2 rounded mb-2">
+        <ul className="ml-6 list-disc flex flex-col gap-2">
+          <li>
+            <span>O nome deve ter no mínimo 3 caracteres.</span>
+          </li>
+          <li>
+            <span>A senha deve ter no mínimo 8 caracteres.</span>
+          </li>
+        </ul>
+      </section>
       <section className="flex flex-col gap-2 mb-2">
         {error.error && (
           <aside className="relative bg-red-400 p-4 flex justify-center items-center rounded">

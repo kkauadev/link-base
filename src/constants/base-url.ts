@@ -1,1 +1,2 @@
-export const baseUrl = "http://localhost:3333";
+export const baseUrl =
+  process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3333";
