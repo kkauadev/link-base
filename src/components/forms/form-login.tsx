@@ -38,10 +38,13 @@ export const FormLogin = () => {
 
       const data = await res.json();
 
+      Cookies.remove("token");
+      Cookies.remove("id");
       Cookies.set("token", data.token);
       Cookies.set("id", data.id);
 
-      return route.push("/");
+      route.push("/");
+      return;
     } catch (error) {
       const customError: CustomError = error as CustomError;
       setError({

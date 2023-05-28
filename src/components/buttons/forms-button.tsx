@@ -1,3 +1,5 @@
+"use client";
+
 interface FormButtonProps {
   type?: "button" | "submit" | "reset";
   text: string;

@@ -24,6 +24,7 @@ export const FormFolders = ({
   finishBtnText,
   type,
 }: FormFoldersProps) => {
+  const [successMessage, setSuccessMessage] = useState(false);
   const [inputName, setInputName] = useState(inputNameValue);
   const [textareaDescription, setTextareaDescription] = useState(
     textareaDescriptionValue
@@ -32,7 +33,6 @@ export const FormFolders = ({
     message: "",
     show: false,
   });
-  const [successMessage, setSuccessMessage] = useState(false);
 
   const { push } = useRouter();
 
@@ -63,12 +63,16 @@ export const FormFolders = ({
       if (!res.ok) throw new Error("Erro ao criar pasta");
 
       setSuccessMessage(true);
+
+      return;
     } catch (error) {
       const customError: CustomError = error as CustomError;
       setError({
         message: customError.message,
         show: true,
       });
+
+      return;
     }
   };
 

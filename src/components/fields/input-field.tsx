@@ -1,3 +1,5 @@
+"use client";
+
 interface InputFieldProps {
   label: string;
   value: string;

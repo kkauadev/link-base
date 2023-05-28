@@ -3,23 +3,29 @@
 import { fetcher } from "@/functions/fetcher-data";
 import { useParams, useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { SuccessMessage } from "../messages/message-success";
+import { CustomError } from "@/types/custom-error";
+import { getAllCookies } from "@/functions/get-cookies";
+import { TextareaField } from "../fields/textarea-field";
+import { FormButton } from "../buttons/forms-button";
+import { baseUrl } from "@/constants/base-url";
+import { Input } from "postcss";
+import { InputField } from "../fields/input-field";
 
 interface FormFoldersProps {
   inputTitleValue?: string;
   inputLinkValue?: string;
   textareaDescriptionValue?: string;
-  fetch: {
-    url: string;
-    options: RequestInit;
-    token: string;
-  };
+  finishBtnText: "Editar" | "Adicionar";
+  type: "create" | "update";
 }
 
 export const FormLink = ({
   inputTitleValue = "",
   inputLinkValue = "",
   textareaDescriptionValue = "",
-  fetch,
+  finishBtnText,
+  type,
 }: FormFoldersProps) => {
   const [inputName, setInputName] = useState(inputTitleValue);
   const [inputLink, setInputLink] = useState(inputLinkValue);
@@ -27,45 +33,66 @@ export const FormLink = ({
     textareaDescriptionValue
   );
   const [successMessage, setSuccessMessage] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { push } = useRouter();
   const { id } = useParams();
+  const [error, setError] = useState({
+    message: "",
+    show: false,
+  });
 
-  const handleChangeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextareaDescription(e.target.value);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
+  const cookies = getAllCookies();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const body = JSON.stringify({
-      title: inputName,
-      link: inputLink,
-      description: textareaDescription,
-    });
-    const data = fetcher(fetch.url + id, fetch.token, {
-      ...fetch.options,
-      method: fetch.options.method,
-      body,
-    });
-    data.then(() => {
+    try {
+      if (!inputName) throw new Error("Nome da pasta não pode ser vazio");
+      if (inputName.length < 3)
+        throw new Error("Nome da pasta deve ter no mínimo 3 caracteres");
+      if (!inputLink) throw new Error("Link não pode ser vazio");
+      if (!textareaDescription) throw new Error("Descrição não pode ser vazia");
+      if (!cookies) throw new Error("Você não está logado");
+
+      const body = JSON.stringify({
+        title: inputName,
+        link: inputLink,
+        description: textareaDescription,
+      });
+
+      const res = await fetch(`${baseUrl}/folders/${type}/${cookies.id}`, {
+        body,
+        method: type === "create" ? "POST" : "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Erro ao criar pasta");
+
       setSuccessMessage(true);
-      setTimeout(() => {
-        setSuccessMessage(false);
-        push(`/folder/${id}`);
-      }, 2000);
-    });
+
+      return;
+    } catch (error) {
+      const customError: CustomError = error as CustomError;
+      setError({
+        message: customError.message,
+        show: true,
+      });
+
+      return;
+    }
   };
 
   return (
     <>
       {successMessage && (
-        <aside className="bg-green-700 text-xl rounded p-3 absolute top-16 left-[35%] right-[35%]">
-          Sucesso na ação, redirecionando...
-        </aside>
+        <SuccessMessage
+          message="Sucesso na ação, redirecionando..."
+          onClose={JSON.stringify(() => {
+            setSuccessMessage(false);
+            finishBtnText === "Adicionar" ? push("/") : push("/folders");
+          })}
+        />
       )}
       <form
         onSubmit={handleSubmit}
@@ -85,47 +112,25 @@ export const FormLink = ({
               id="input-folder-name"
             />
           </div>
-          <div>
-            <label className="block mb-1" htmlFor="input-folder-name">
-              Link
-            </label>
-            <input
-              onChange={(e) => setInputLink(e.target.value)}
-              value={inputLink}
-              className="bg-tertiary max-w-xl w-full px-2 py-1 rounded outline-none"
-              type="text"
-              name="input-folder-name"
-              id="input-folder-name"
-            />
-          </div>
-          <div>
-            <label className="block mb-1" htmlFor="input-folder-description">
-              Descrição
-            </label>
-            <textarea
-              onChange={(e) => handleChangeTextarea(e)}
-              value={textareaDescription}
-              ref={textareaRef}
-              className="resize-none max-w-xl bg-tertiary w-full p-2 rounded outline-none"
-              name="input-folder-description"
-              id="input-folder-description"
-            />
-          </div>
+          <InputField
+            label="Título"
+            value={inputName}
+            onChange={setInputName}
+          />
+          <InputField label="Link" value={inputLink} onChange={setInputLink} />
+          <TextareaField
+            label="Descrição"
+            value={textareaDescription}
+            onChange={setTextareaDescription}
+          />
         </div>
         <div className="flex gap-4 mt-5">
-          <button
-            className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-green-600"
-            type="submit"
-          >
-            Criar
-          </button>
-          <button
-            type="button"
-            onClick={() => push(`/folder/${id}`)}
-            className="text-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-red-600"
-          >
-            Cancelar
-          </button>
+          <FormButton backgroundColor="green" text="Criar" type="submit" />
+          <FormButton
+            backgroundColor="red"
+            text="Cancelar"
+            onClick={() => push("/folder")}
+          />
         </div>
       </form>
     </>
