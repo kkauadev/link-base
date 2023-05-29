@@ -2,14 +2,14 @@
 
 import { CustomError } from "@/types/custom-error";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SuccessMessage } from "../messages/message-success";
 import { baseUrl } from "@/constants/base-url";
 import { getAllCookies } from "@/functions/get-cookies";
+import { ErrorMessage } from "../messages/message-error";
 import { TextareaField } from "../fields/textarea-field";
 import { InputField } from "../fields/input-field";
 import { FormButton } from "../buttons/forms-button";
-import { ErrorMessage } from "../messages/message-error";
 
 interface FormFoldersProps {
   inputNameValue?: string;
@@ -34,9 +34,9 @@ export const FormFolders = ({
     show: false,
   });
 
-  const { push } = useRouter();
-
   const cookies = getAllCookies();
+
+  const { push } = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,21 +81,24 @@ export const FormFolders = ({
       {successMessage && (
         <SuccessMessage
           message="Sucesso na ação, redirecionando..."
-          onClose={JSON.stringify(() => {
-            setSuccessMessage(false);
-            finishBtnText === "Adicionar" ? push("/") : push("/folders");
-          })}
+          onCloseMap={{
+            show: () => {
+              setSuccessMessage(false);
+              finishBtnText === "Adicionar" ? push("/") : push("/folders");
+            },
+          }}
         />
       )}
       {error.show && (
         <ErrorMessage
           message={error.message}
-          onClose={JSON.stringify(() =>
-            setError({
-              message: "",
-              show: false,
-            })
-          )}
+          onCloseMap={{
+            show: () =>
+              setError({
+                message: "",
+                show: false,
+              }),
+          }}
         />
       )}
       <form
@@ -106,12 +109,16 @@ export const FormFolders = ({
           <InputField
             label="Nome da pasta"
             value={inputName}
-            onChange={setInputName}
+            onChangeMap={{
+              onChange: (value: string) => setInputName(value),
+            }}
           />
           <TextareaField
             label="Descrição"
             value={textareaDescription}
-            onChange={setTextareaDescription}
+            onChangeMap={{
+              onChange: (value: string) => setTextareaDescription(value),
+            }}
           />
         </div>
         <div className="flex gap-4 mt-5">
@@ -119,7 +126,10 @@ export const FormFolders = ({
           <FormButton
             backgroundColor="red"
             text="Cancelar"
-            onClick={() => push("/")}
+            type="button"
+            onClickMap={{
+              click: () => push("/"),
+            }}
           />
         </div>
       </form>

@@ -4,13 +4,15 @@ import { AiOutlineClose as IconClose } from "react-icons/ai";
 
 interface FormButtonProps {
   message: string;
-  onClose: string;
+  onCloseMap: Record<string, () => void>;
 }
 
-export const ErrorMessage = ({ message, onClose }: FormButtonProps) => {
+export const ErrorMessage = ({ message, onCloseMap }: FormButtonProps) => {
   const handleClose = () => {
-    const onCloseFn = JSON.parse(onClose);
-    onCloseFn();
+    const onClose = onCloseMap["show"];
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (

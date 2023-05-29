@@ -88,10 +88,12 @@ export const FormLink = ({
       {successMessage && (
         <SuccessMessage
           message="Sucesso na ação, redirecionando..."
-          onClose={JSON.stringify(() => {
-            setSuccessMessage(false);
-            finishBtnText === "Adicionar" ? push("/") : push("/folders");
-          })}
+          onCloseMap={{
+            show: () => {
+              setSuccessMessage(false);
+              finishBtnText === "Adicionar" ? push("/") : push("/folders");
+            },
+          }}
         />
       )}
       <form
@@ -115,13 +117,23 @@ export const FormLink = ({
           <InputField
             label="Título"
             value={inputName}
-            onChange={setInputName}
+            onChangeMap={{
+              onChange: setInputName,
+            }}
           />
-          <InputField label="Link" value={inputLink} onChange={setInputLink} />
+          <InputField
+            label="Link"
+            value={inputLink}
+            onChangeMap={{
+              onChange: setInputLink,
+            }}
+          />
           <TextareaField
             label="Descrição"
             value={textareaDescription}
-            onChange={setTextareaDescription}
+            onChangeMap={{
+              onChange: setTextareaDescription,
+            }}
           />
         </div>
         <div className="flex gap-4 mt-5">
@@ -129,7 +141,9 @@ export const FormLink = ({
           <FormButton
             backgroundColor="red"
             text="Cancelar"
-            onClick={() => push("/folder")}
+            onClickMap={{
+              click: () => push("/folder"),
+            }}
           />
         </div>
       </form>

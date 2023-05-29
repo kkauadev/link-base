@@ -3,18 +3,21 @@
 interface InputFieldProps {
   label: string;
   value: string;
-  onChange: (value: string) => void;
   type?: string;
+  onChangeMap: Record<"onChange", (value: string) => void>;
 }
 
 export const InputField = ({
   label,
   value,
-  onChange,
   type = "text",
+  onChangeMap,
 }: InputFieldProps) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange = onChangeMap["onChange"];
+    if (onChange) {
+      onChange(e.target.value);
+    }
   };
 
   return (

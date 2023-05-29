@@ -4,13 +4,13 @@ import { useRef, useEffect } from "react";
 interface TextareaFieldProps {
   label: string;
   value: string;
-  onChange: (value: string) => void;
+  onChangeMap: Record<"onChange", (value: string) => void>;
 }
 
 export const TextareaField = ({
   label,
-  onChange,
   value,
+  onChangeMap,
 }: TextareaFieldProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -22,7 +22,10 @@ export const TextareaField = ({
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(e.target.value);
+    const onChange = onChangeMap["onChange"];
+    if (onChange) {
+      onChange(e.target.value);
+    }
   };
 
   return (
