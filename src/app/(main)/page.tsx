@@ -23,9 +23,16 @@ export default function Home() {
     stored && `${baseUrl}/user/${stored.id}`,
     async (url) => {
       if (stored) {
-        return (await fetcher(url, stored.token, {
+        const res = await fetch(url, {
           method: "GET",
-        }).then((res) => res.json())) as User;
+          headers: {
+            Authorization: `Bearer ${stored.token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        return data as User;
       }
     },
     {

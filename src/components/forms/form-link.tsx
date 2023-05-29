@@ -34,7 +34,7 @@ export const FormLink = ({
   );
   const [successMessage, setSuccessMessage] = useState(false);
   const { push } = useRouter();
-  const { id } = useParams();
+  const { id, folderId } = useParams();
   const [error, setError] = useState({
     message: "",
     show: false,
@@ -58,7 +58,9 @@ export const FormLink = ({
         description: textareaDescription,
       });
 
-      const res = await fetch(`${baseUrl}/folders/${type}/${cookies.id}`, {
+      const url = type === "create" ? `/${id}` : `/${folderId}/${id}`;
+
+      const res = await fetch(`${baseUrl}/links/${type}${url}`, {
         body,
         method: type === "create" ? "POST" : "PUT",
         headers: {
@@ -91,7 +93,7 @@ export const FormLink = ({
           onCloseMap={{
             show: () => {
               setSuccessMessage(false);
-              finishBtnText === "Adicionar" ? push("/") : push("/folders");
+              push(`/folder/${id}`);
             },
           }}
         />
@@ -101,19 +103,6 @@ export const FormLink = ({
         className="max-w-xl my-10 border-2 border-primary p-4 rounded"
       >
         <div className="flex flex-col gap-3">
-          <div>
-            <label className="block mb-1" htmlFor="input-folder-name">
-              Título
-            </label>
-            <input
-              onChange={(e) => setInputName(e.target.value)}
-              value={inputName}
-              className="bg-tertiary max-w-xl w-full px-2 py-1 rounded outline-none"
-              type="text"
-              name="input-folder-name"
-              id="input-folder-name"
-            />
-          </div>
           <InputField
             label="Título"
             value={inputName}
@@ -142,7 +131,7 @@ export const FormLink = ({
             backgroundColor="red"
             text="Cancelar"
             onClickMap={{
-              click: () => push("/folder"),
+              click: () => push(`/folder/${id}`),
             }}
           />
         </div>

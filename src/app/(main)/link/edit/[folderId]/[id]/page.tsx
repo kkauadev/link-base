@@ -11,13 +11,29 @@ import useSWR from "swr";
 export default function FolderEdit() {
   const { id } = useParams();
   const stored = getUserToken();
+
+  // async (url) => {
+  //   if (stored) {
+  //     return (await fetcher(url, stored.token, {
+  //       method: "GET",
+  //     }).then((res) => res.json())) as Link;
+  //   }
+  // };
+
   const { data } = useSWR(
     `${baseUrl}/links/${id}`,
     async (url) => {
       if (stored) {
-        return (await fetcher(url, stored.token, {
+        const res = await fetch(url, {
           method: "GET",
-        }).then((res) => res.json())) as Link;
+          headers: {
+            Authorization: `Bearer ${stored.token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        return data as Link;
       }
     },
     {
@@ -30,11 +46,8 @@ export default function FolderEdit() {
       <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Edite a pasta</h1>
       {data && stored && (
         <FormLink
-          fetch={{
-            url: `${baseUrl}/links/update/`,
-            options: { method: "PUT" },
-            token: stored.token,
-          }}
+          finishBtnText="Editar"
+          type="update"
           inputTitleValue={data.title}
           inputLinkValue={data.link}
           textareaDescriptionValue={data.description}
