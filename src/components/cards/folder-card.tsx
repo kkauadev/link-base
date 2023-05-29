@@ -1,5 +1,7 @@
 "use client";
 
+import { baseUrl } from "@/constants/base-url";
+import { getUserToken } from "@/functions/get-user-token";
 import { deleteItem } from "@/services";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -28,8 +30,16 @@ export const FolderCard = ({
   const { refresh, push } = useRouter();
 
   const deleteFolder = async () => {
-    await deleteItem({ id, type: "folders" }).then((data) => {
-      if (data) refresh();
+    const stored = getUserToken();
+    console.log(stored);
+    if (!stored) return console.log("Não há token");
+    await fetch(`${baseUrl}/folders/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${stored.token}`,
+      },
+    }).then((res) => {
+      if (res.ok) refresh();
     });
   };
 

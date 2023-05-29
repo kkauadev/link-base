@@ -58,7 +58,7 @@ export const FormLink = ({
         description: textareaDescription,
       });
 
-      const url = type === "create" ? `/${id}` : `/${folderId}/${id}`;
+      const url = type === "create" ? `/${id}` : `/${id}`;
 
       const res = await fetch(`${baseUrl}/links/${type}${url}`, {
         body,
@@ -93,7 +93,7 @@ export const FormLink = ({
           onCloseMap={{
             show: () => {
               setSuccessMessage(false);
-              push(`/folder/${id}`);
+              push(type === "create" ? `/folder/${id}` : `/folder/${folderId}`);
             },
           }}
         />
@@ -126,7 +126,11 @@ export const FormLink = ({
           />
         </div>
         <div className="flex gap-4 mt-5">
-          <FormButton backgroundColor="green" text="Criar" type="submit" />
+          <FormButton
+            backgroundColor="green"
+            text={finishBtnText}
+            type="submit"
+          />
           <FormButton
             backgroundColor="red"
             text="Cancelar"

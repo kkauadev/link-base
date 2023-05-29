@@ -8,7 +8,7 @@ import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
-import { deleteItem, getData } from "@/services";
+import { getUserToken } from "@/functions/get-user-token";
 import { Folder } from "@/types/user";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -22,15 +22,39 @@ export default function FolderPage() {
   const { id } = useParams();
   const { push } = useRouter();
 
-  const { data, error } = useSWR(`${baseUrl}/folder/${id}`, getData<Folder>, {
-    revalidateOnMount: true,
-  });
+  const getData = async (url: string) => {
+    const stored = getUserToken();
+    if (stored) {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${stored.token}`,
+        },
+      });
+
+      const data: Folder = await res.json();
+
+      return data;
+    }
+  };
 
   const deleteFolder = async () => {
-    await deleteItem({ id, type: "folders" }).then((data) => {
-      if (data) push("/");
+    const stored = getUserToken();
+    console.log(stored);
+    if (!stored) return console.log("Não há token");
+    await fetch(`${baseUrl}/folders/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${stored.token}`,
+      },
+    }).then((res) => {
+      if (res.ok) push("/");
     });
   };
+
+  const { data, error } = useSWR(`${baseUrl}/folder/${id}`, getData, {
+    revalidateOnMount: true,
+  });
 
   return (
     <>

@@ -4,7 +4,6 @@ import { FolderCard } from "@/components/cards/folder-card";
 import { loadingCards } from "@/components/cards/loading-cards";
 import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
-import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,7 @@ export default function Home() {
 
   const stored = getUserToken();
 
-  const { data, error } = useSWR(
+  const { data, error, isLoading } = useSWR(
     stored && `${baseUrl}/user/${stored.id}`,
     async (url) => {
       if (stored) {
@@ -40,6 +39,8 @@ export default function Home() {
     }
   );
 
+  const isDisabled = data?.folders?.length === 0;
+
   return (
     <>
       <PageTitle title="Minhas pastas" />
@@ -56,9 +57,9 @@ export default function Home() {
               setViewDeleteButton(false);
               setViewEditButton((prev) => !prev);
             }}
-            disabled={data?.folders?.length === 0}
+            disabled={isDisabled}
             className={`${
-              data?.folders?.length === 0 && "opacity-50 cursor-not-allowed"
+              isDisabled && "opacity-50 cursor-not-allowed"
             } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-blue-600`}
           >
             Editar
@@ -68,9 +69,9 @@ export default function Home() {
               setViewEditButton(false);
               setViewDeleteButton((prev) => !prev);
             }}
-            disabled={data?.folders?.length === 0}
+            disabled={isDisabled}
             className={`${
-              data?.folders?.length === 0 && "opacity-50 cursor-not-allowed"
+              isDisabled && "opacity-50 cursor-not-allowed"
             } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-red-600`}
           >
             Excluir
@@ -78,9 +79,7 @@ export default function Home() {
         </div>
         {data && (
           <div className="flex flex-wrap gap-4">
-            {!data.folders ? (
-              <p>Ainda não existe nenhuma página</p>
-            ) : (
+            {data.folders ? (
               data.folders.map(({ id, name, description, links }) => (
                 <FolderCard
                   key={id}
@@ -96,6 +95,8 @@ export default function Home() {
                   }}
                 />
               ))
+            ) : (
+              <p>Ainda não existe nenhuma página</p>
             )}
           </div>
         )}

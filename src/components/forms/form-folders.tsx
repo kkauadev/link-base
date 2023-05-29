@@ -87,7 +87,7 @@ export const FormFolders = ({
           onCloseMap={{
             show: () => {
               setSuccessMessage(false);
-              finishBtnText === "Adicionar" ? push("/") : push("/folders");
+              finishBtnText === "Adicionar" ? push("/") : push(`/folder/${id}`);
             },
           }}
         />

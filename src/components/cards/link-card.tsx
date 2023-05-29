@@ -1,5 +1,6 @@
 "use client";
 
+import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
   relativeDateFormatter,
@@ -28,13 +29,12 @@ export const LinkCard = ({ link }: LinkCardProps) => {
   const deleteLink = async () => {
     const stored = getUserToken();
     if (!stored) return console.log("Não há token");
-    await fetcher(
-      `http://localhost:3333/links/delete/${link.id}`,
-      stored.token,
-      {
-        method: "DELETE",
-      }
-    ).then(() => {
+    await fetch(`${baseUrl}/links/delete/${link.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${stored.token}`,
+      },
+    }).then(() => {
       refresh();
     });
   };

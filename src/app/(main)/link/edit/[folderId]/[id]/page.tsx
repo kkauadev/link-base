@@ -43,7 +43,7 @@ export default function FolderEdit() {
 
   return (
     <>
-      <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Edite a pasta</h1>
+      <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Edite o link</h1>
       {data && stored && (
         <FormLink
           finishBtnText="Editar"

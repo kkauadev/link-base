@@ -1,3 +1,5 @@
+"use client";
+
 export const loadingCards = () => {
   const cards = [];
   for (let i = 0; i < 3; i++) {
