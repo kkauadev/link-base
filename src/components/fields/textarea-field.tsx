@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 interface TextareaFieldProps {
   label: string;
   value: string;
+  placeholder?: string;
   onChangeMap: Record<"onChange", (value: string) => void>;
 }
 
@@ -11,6 +12,7 @@ export const TextareaField = ({
   label,
   value,
   onChangeMap,
+  placeholder = "",
 }: TextareaFieldProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -37,6 +39,7 @@ export const TextareaField = ({
         onChange={handleChange}
         value={value}
         ref={textareaRef}
+        placeholder={placeholder}
         className="resize-none max-w-xl bg-tertiary w-full p-2 rounded outline-none"
         name="input-folder-description"
         id="input-folder-description"

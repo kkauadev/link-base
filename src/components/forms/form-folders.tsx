@@ -1,8 +1,8 @@
 "use client";
 
 import { CustomError } from "@/types/custom-error";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useState } from "react";
 import { SuccessMessage } from "../messages/message-success";
 import { baseUrl } from "@/constants/base-url";
 import { getAllCookies } from "@/functions/get-cookies";
@@ -13,6 +13,7 @@ import { FormButton } from "../buttons/forms-button";
 
 interface FormFoldersProps {
   inputNameValue?: string;
+  placeholders?: string;
   textareaDescriptionValue?: string;
   finishBtnText: "Editar" | "Adicionar";
   type: "create" | "update";
@@ -21,6 +22,7 @@ interface FormFoldersProps {
 export const FormFolders = ({
   inputNameValue = "",
   textareaDescriptionValue = "",
+  placeholders = "",
   finishBtnText,
   type,
 }: FormFoldersProps) => {
@@ -36,6 +38,7 @@ export const FormFolders = ({
 
   const cookies = getAllCookies();
 
+  const { id } = useParams();
   const { push } = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -109,6 +112,7 @@ export const FormFolders = ({
           <InputField
             label="Nome da pasta"
             value={inputName}
+            placeholder={placeholders}
             onChangeMap={{
               onChange: (value: string) => setInputName(value),
             }}
@@ -116,19 +120,24 @@ export const FormFolders = ({
           <TextareaField
             label="Descrição"
             value={textareaDescription}
+            placeholder={placeholders}
             onChangeMap={{
               onChange: (value: string) => setTextareaDescription(value),
             }}
           />
         </div>
         <div className="flex gap-4 mt-5">
-          <FormButton backgroundColor="green" text="Adicionar" type="submit" />
+          <FormButton
+            backgroundColor="green"
+            text={type === "create" ? "Adicionar" : "Editar"}
+            type="submit"
+          />
           <FormButton
             backgroundColor="red"
             text="Cancelar"
             type="button"
             onClickMap={{
-              click: () => push("/"),
+              click: () => push(!id ? "/" : `/folder/${id}`),
             }}
           />
         </div>

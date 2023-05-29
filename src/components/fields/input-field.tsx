@@ -4,6 +4,7 @@ interface InputFieldProps {
   label: string;
   value: string;
   type?: string;
+  placeholder?: string;
   onChangeMap: Record<"onChange", (value: string) => void>;
 }
 
@@ -11,6 +12,7 @@ export const InputField = ({
   label,
   value,
   type = "text",
+  placeholder = "",
   onChangeMap,
 }: InputFieldProps) => {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +34,7 @@ export const InputField = ({
         type={type}
         name="input-folder-name"
         id="input-folder-name"
+        placeholder={placeholder}
       />
     </div>
   );
