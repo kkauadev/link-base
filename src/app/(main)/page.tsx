@@ -5,6 +5,7 @@ import { loadingCards } from "@/components/cards/loading-cards";
 import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
+import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,22 +19,9 @@ export default function Home() {
 
   const stored = getUserToken();
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error } = useSWR(
     stored && `${baseUrl}/user/${stored.id}`,
-    async (url) => {
-      if (stored) {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${stored.token}`,
-          },
-        });
-
-        const data = await res.json();
-
-        return data as User;
-      }
-    },
+    (url) => getData<User>(url, stored),
     {
       revalidateOnMount: true,
     }
@@ -47,7 +35,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 mt-10 mb-5">
         <div className="text-sm sm:text-base flex gap-4">
           <button
-            onClick={() => push("/folder/create")}
+            onClick={() => push(`/folder/create/${stored?.id}`)}
             className="h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-green-600"
           >
             Adicionar

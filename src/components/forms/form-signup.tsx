@@ -30,16 +30,6 @@ export const FormSignup = () => {
       if (password !== confirmPassword)
         throw new Error("As senhas não coincidem");
 
-      // const res = await fetch("http://localhost:3333/user/create", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     name: username,
-      //     password,
-      //   }),
-      // });
       const res = await createUser(`${baseUrl}/user/create`, {
         name: username,
         password,

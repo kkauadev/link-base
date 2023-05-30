@@ -1,8 +1,7 @@
 "use client";
 
-import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
-import { deleteItem } from "@/services";
+import { deleteData } from "@/services/delete-data";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -28,27 +27,14 @@ export const FolderCard = ({
   viewButtons,
 }: FolderCardProps) => {
   const { refresh, push } = useRouter();
-
-  const deleteFolder = async () => {
-    const stored = getUserToken();
-    console.log(stored);
-    if (!stored) return console.log("Não há token");
-    await fetch(`${baseUrl}/folders/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${stored.token}`,
-      },
-    }).then((res) => {
-      if (res.ok) refresh();
-    });
-  };
+  const stored = getUserToken();
 
   return (
     <article className="break-words relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
       <div className="absolute top-[-1rem] right-[-1rem]">
         {viewButtons.delete && (
           <button
-            onClick={() => deleteFolder()}
+            onClick={() => deleteData(stored, id, refresh, "folders")}
             className="text-white w-8 h-8 flex justify-center items-center rounded-full  bg-red-600 transition hover:brightness-75"
           >
             <CloseIcon className="text-lg" />

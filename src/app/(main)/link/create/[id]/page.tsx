@@ -1,7 +1,6 @@
 "use client";
 
 import { FormLink } from "@/components/forms/form-link";
-import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
 
 export default function FolderEdit() {

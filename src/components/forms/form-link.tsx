@@ -11,6 +11,7 @@ import { FormButton } from "../buttons/forms-button";
 import { baseUrl } from "@/constants/base-url";
 import { Input } from "postcss";
 import { InputField } from "../fields/input-field";
+import { createOrUpdateData } from "@/services/create-data";
 
 interface FormFoldersProps {
   inputTitleValue?: string;
@@ -52,22 +53,17 @@ export const FormLink = ({
       if (!textareaDescription) throw new Error("Descrição não pode ser vazia");
       if (!cookies) throw new Error("Você não está logado");
 
-      const body = JSON.stringify({
-        title: inputName,
-        link: inputLink,
-        description: textareaDescription,
-      });
-
-      const url = type === "create" ? `/${id}` : `/${id}`;
-
-      const res = await fetch(`${baseUrl}/links/${type}${url}`, {
-        body,
-        method: type === "create" ? "POST" : "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
+      const res = await createOrUpdateData(
+        {
+          title: inputName,
+          link: inputLink,
+          description: textareaDescription,
         },
-      });
+        "links",
+        type,
+        id,
+        cookies.token
+      );
 
       if (!res.ok) throw new Error("Erro ao criar pasta");
 

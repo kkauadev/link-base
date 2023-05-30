@@ -10,6 +10,7 @@ import { ErrorMessage } from "../messages/message-error";
 import { TextareaField } from "../fields/textarea-field";
 import { InputField } from "../fields/input-field";
 import { FormButton } from "../buttons/forms-button";
+import { createOrUpdateData } from "@/services/create-data";
 
 interface FormFoldersProps {
   inputNameValue?: string;
@@ -49,19 +50,16 @@ export const FormFolders = ({
         throw new Error("Nome da pasta deve ter no mínimo 3 caracteres");
       if (!cookies) throw new Error("Você não está logado");
 
-      const body = JSON.stringify({
-        name: inputName,
-        description: textareaDescription,
-      });
-
-      const res = await fetch(`${baseUrl}/folders/${type}/${cookies.id}`, {
-        body,
-        method: type === "create" ? "POST" : "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies.token}`,
+      const res = await createOrUpdateData(
+        {
+          name: inputName,
+          description: textareaDescription,
         },
-      });
+        "folders",
+        type,
+        id,
+        cookies.token
+      );
 
       if (!res.ok) throw new Error("Erro ao criar pasta");
 

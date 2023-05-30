@@ -2,8 +2,8 @@
 
 import { FormLink } from "@/components/forms/form-link";
 import { baseUrl } from "@/constants/base-url";
-import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
+import { getData } from "@/services/get-data";
 import { Link } from "@/types/user";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
@@ -12,30 +12,9 @@ export default function FolderEdit() {
   const { id } = useParams();
   const stored = getUserToken();
 
-  // async (url) => {
-  //   if (stored) {
-  //     return (await fetcher(url, stored.token, {
-  //       method: "GET",
-  //     }).then((res) => res.json())) as Link;
-  //   }
-  // };
-
   const { data } = useSWR(
     `${baseUrl}/links/${id}`,
-    async (url) => {
-      if (stored) {
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${stored.token}`,
-          },
-        });
-
-        const data = await res.json();
-
-        return data as Link;
-      }
-    },
+    (url) => getData<Link>(url, stored),
     {
       revalidateOnMount: true,
     }

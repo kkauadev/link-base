@@ -2,7 +2,7 @@
 
 import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
-import { getData } from "@/services";
+import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,9 +18,13 @@ export default function MainLayout({
 
   const stored = getUserToken();
 
-  const { data } = useSWR(`${baseUrl}/user/${stored?.id}`, getData<User>, {
-    revalidateOnMount: true,
-  });
+  const { data } = useSWR(
+    stored && `${baseUrl}/user/${stored.id}`,
+    (url) => getData<User>(url, stored),
+    {
+      revalidateOnMount: true,
+    }
+  );
 
   return (
     <>

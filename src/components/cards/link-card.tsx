@@ -1,12 +1,11 @@
 "use client";
 
-import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
-import { fetcher } from "@/functions/fetcher-data";
 import { getUserToken } from "@/functions/get-user-token";
+import { deleteData } from "@/services/delete-data";
 import { Link as LinkType } from "@/types/user";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -25,19 +24,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
   const [viewOptions, setViewOptions] = useState(false);
   const { refresh } = useRouter();
   const { id } = useParams();
-
-  const deleteLink = async () => {
-    const stored = getUserToken();
-    if (!stored) return console.log("Não há token");
-    await fetch(`${baseUrl}/links/delete/${link.id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${stored.token}`,
-      },
-    }).then(() => {
-      refresh();
-    });
-  };
+  const stored = getUserToken();
 
   return (
     <li className="max-w-5xl w-full bg-tertiary p-4 rounded">
@@ -57,7 +44,10 @@ export const LinkCard = ({ link }: LinkCardProps) => {
               </Link>
             </li>
             <li className="flex items-center gap-2">
-              <button className="text-white" onClick={() => deleteLink()}>
+              <button
+                className="text-white"
+                onClick={() => deleteData(stored, link.id, refresh, "links")}
+              >
                 Excluir
               </button>
             </li>

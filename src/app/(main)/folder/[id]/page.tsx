@@ -9,6 +9,8 @@ import {
   relativeDateFormatter,
 } from "@/functions/date-formatter";
 import { getUserToken } from "@/functions/get-user-token";
+import { deleteData } from "@/services/delete-data";
+import { getData } from "@/services/get-data";
 import { Folder } from "@/types/user";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -22,39 +24,15 @@ export default function FolderPage() {
   const { id } = useParams();
   const { push } = useRouter();
 
-  const getData = async (url: string) => {
-    const stored = getUserToken();
-    if (stored) {
-      const res = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${stored.token}`,
-        },
-      });
+  const stored = getUserToken();
 
-      const data: Folder = await res.json();
-
-      return data;
+  const { data, error } = useSWR(
+    `${baseUrl}/folder/${id}`,
+    (url) => getData<Folder>(url, stored),
+    {
+      revalidateOnMount: true,
     }
-  };
-
-  const deleteFolder = async () => {
-    const stored = getUserToken();
-    console.log(stored);
-    if (!stored) return console.log("Não há token");
-    await fetch(`${baseUrl}/folders/delete/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${stored.token}`,
-      },
-    }).then((res) => {
-      if (res.ok) push("/");
-    });
-  };
-
-  const { data, error } = useSWR(`${baseUrl}/folder/${id}`, getData, {
-    revalidateOnMount: true,
-  });
+  );
 
   return (
     <>
@@ -98,7 +76,7 @@ export default function FolderPage() {
               </button>
             </Link>
             <button
-              onClick={() => deleteFolder()}
+              onClick={() => deleteData(stored, id, () => push("/"), "folders")}
               className={`h-[2rem] text-white w-1/2 bg-red-600  flex items-center justify-center text-2xl px-2 py-1  rounded transition hover:brightness-75`}
             >
               <IconDelete />
