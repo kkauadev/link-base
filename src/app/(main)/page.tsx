@@ -1,32 +1,37 @@
-"use client";
-
-import { FolderCard } from "@/components/cards/folder-card";
-import { loadingCards } from "@/components/cards/loading-cards";
 import { baseUrl } from "@/constants/base-url";
-import { getUserToken } from "@/functions/get-user-token";
-import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
-import { useRouter } from "next/navigation";
-import { memo, useState } from "react";
-import useSWR from "swr";
-import { HomeButton } from "../../components/buttons/home-button";
+import { cookies } from "next/headers";
+import Link from "next/link";
 
-export default function Home() {
-  const [viewEditButton, setViewEditButton] = useState(false);
-  const [viewDeleteButton, setViewDeleteButton] = useState(false);
+export default async function Home() {
+  const cookieStore = cookies();
+  const id = cookieStore.get("id");
+  const token = cookieStore.get("token");
 
-  const { push } = useRouter();
+  const getUserData = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/user/${id?.value}`, {
+        headers: {
+          Authorization: `Bearer ${token?.value}`,
+        },
+        next: {
+          revalidate: 10,
+        },
+      });
 
-  const stored = getUserToken();
+      return res;
+    } catch (error) {
+      return null;
+    }
+  };
 
-  const { data, error } = useSWR(
-    stored && `${baseUrl}/user/${stored.id}`,
-    (url) => getData<User>(url, stored, "homepage")
-  );
+  const res = await getUserData();
 
-  const isDisabled = data?.folders?.length === 0;
+  if (!res || !res.ok) {
+    return <div>Erro ao carregar dados</div>;
+  }
 
-  const MemoizedFolderCard = memo(FolderCard);
+  const data: User = await res.json();
 
   return (
     <>
@@ -34,30 +39,13 @@ export default function Home() {
         Minhas pastas
       </h1>
       <section className="flex flex-col gap-4 mt-10 mb-5">
-        <div className="text-sm sm:text-base flex gap-4">
-          <HomeButton
-            color="green"
-            text="Adicionar"
-            onClick={() => push(`/folder/create/${stored?.id}`)}
-          />
-          <HomeButton
-            color="blue"
-            text="Editar"
-            isDisabled={isDisabled}
-            onClick={() => {
-              setViewDeleteButton(false);
-              setViewEditButton((prev) => !prev);
-            }}
-          />
-          <HomeButton
-            color="red"
-            text="Excluir"
-            isDisabled={isDisabled}
-            onClick={() => {
-              setViewEditButton(false);
-              setViewDeleteButton((prev) => !prev);
-            }}
-          />
+        <div>
+          <Link
+            href={`/folder/create/${token?.value}`}
+            className={`w-[10rem] px-4 py-2 items-center flex gap-4 text-white rounded transition hover:brightness-75 bg-green-600`}
+          >
+            <span>Criar nova pasta</span>
+          </Link>
         </div>
         {data && (
           <div className="flex flex-wrap gap-4">
@@ -65,38 +53,70 @@ export default function Home() {
               data.folders.map(({ id, name, description, links }) => {
                 const quantityOfLinks = links.length;
 
+                // const toggleMenuId = `toggle-menu-${id}`;
+
                 return (
-                  <MemoizedFolderCard
-                    key={id}
-                    data={{
-                      id,
-                      name,
-                      description,
-                      quantityOfLinks,
-                    }}
-                    viewButtons={{
-                      edit: viewEditButton,
-                      delete: viewDeleteButton,
-                    }}
-                  />
+                  <>
+                    <article
+                      key={id}
+                      className="max-h-[9rem] flex flex-col justify-between relative break-words w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary"
+                    >
+                      <div>
+                        <div className="flex justify-between items-center mb-1">
+                          <Link
+                            href={`/folder/${id}`}
+                            className="text-xl font-bold text-secondary hover:underline line-clamp-1 mr-2"
+                          >
+                            {name}
+                          </Link>
+                          {
+                            // <label
+                            //   htmlFor={toggleMenuId}
+                            //   className="label-menu"
+                            // >
+                            //   <IconEllipsis className="text-2xl" />
+                            // </label>
+                          }
+                        </div>
+                        {
+                          // <input
+                          //   className="toggle-menu"
+                          //   type="checkbox"
+                          //   name="visually-folder-menu"
+                          //   id={toggleMenuId}
+                          // />
+                          // <nav className="menu p-3 rounded bg-tertiary">
+                          //   <ul>
+                          //     <li>
+                          //       <Link href={`/folder/edit/${id}`}>Editar</Link>
+                          //     </li>
+                          //     <li>
+                          //       <button></button>
+                          //     </li>
+                          //   </ul>
+                          // </nav>
+                        }
+                        <p className="line-clamp-2">{description}</p>
+                      </div>
+                      <div className="text-sm sm:text-base mt-1 cursor-default">
+                        {quantityOfLinks ? (
+                          <span className="text-zinc-400">
+                            Quantidade de links: {quantityOfLinks}
+                          </span>
+                        ) : (
+                          <span className="text-zinc-400">
+                            Nenhum link adicionado
+                          </span>
+                        )}
+                      </div>
+                    </article>
+                  </>
                 );
               })
             ) : (
               <p>Ainda não existe nenhuma página</p>
             )}
           </div>
-        )}
-        {!data && !error && (
-          <div className="flex flex-wrap gap-4">
-            {loadingCards().map((card) => {
-              return <div key={card.key}>{card}</div>;
-            })}
-          </div>
-        )}
-        {error && (
-          <p className="text-xl">
-            Erro ao carregar as páginas, por favor volte mais tarde.
-          </p>
         )}
       </section>
     </>
