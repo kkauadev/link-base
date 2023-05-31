@@ -2,7 +2,6 @@
 
 import { LinkCard } from "@/components/cards/link-card";
 import { loadingCards } from "@/components/cards/loading-cards";
-import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
@@ -37,7 +36,9 @@ export default function FolderPage() {
   return (
     <>
       {data ? (
-        <PageTitle title={`Pasta ${data?.name}`} />
+        <h1 className="sm:w-[calc(50vw-3.5rem)] text-xl sm:text-3xl">
+          Pasta {data?.name}
+        </h1>
       ) : (
         <h1 className="text-xl sm:text-3xl">Carregando...</h1>
       )}

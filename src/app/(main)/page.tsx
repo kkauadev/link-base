@@ -2,14 +2,14 @@
 
 import { FolderCard } from "@/components/cards/folder-card";
 import { loadingCards } from "@/components/cards/loading-cards";
-import { PageTitle } from "@/components/layouts/title-page";
 import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
 import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { memo, useState } from "react";
 import useSWR from "swr";
+import { HomeButton } from "../../components/buttons/home-button";
 
 export default function Home() {
   const [viewEditButton, setViewEditButton] = useState(false);
@@ -21,68 +21,66 @@ export default function Home() {
 
   const { data, error } = useSWR(
     stored && `${baseUrl}/user/${stored.id}`,
-    (url) => getData<User>(url, stored),
-    {
-      revalidateOnMount: true,
-    }
+    (url) => getData<User>(url, stored)
   );
 
   const isDisabled = data?.folders?.length === 0;
 
+  const MemoizedFolderCard = memo(FolderCard);
+
   return (
     <>
-      <PageTitle title="Minhas pastas" />
+      <h1 className="sm:w-[calc(50vw-3.5rem)] text-xl sm:text-3xl">
+        Minhas pastas
+      </h1>
       <section className="flex flex-col gap-4 mt-10 mb-5">
         <div className="text-sm sm:text-base flex gap-4">
-          <button
+          <HomeButton
+            color="green"
+            text="Adicionar"
             onClick={() => push(`/folder/create/${stored?.id}`)}
-            className="h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-green-600"
-          >
-            Adicionar
-          </button>
-          <button
+          />
+          <HomeButton
+            color="blue"
+            text="Editar"
+            isDisabled={isDisabled}
             onClick={() => {
               setViewDeleteButton(false);
               setViewEditButton((prev) => !prev);
             }}
-            disabled={isDisabled}
-            className={`${
-              isDisabled && "opacity-50 cursor-not-allowed"
-            } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-blue-600`}
-          >
-            Editar
-          </button>
-          <button
+          />
+          <HomeButton
+            color="red"
+            text="Excluir"
+            isDisabled={isDisabled}
             onClick={() => {
               setViewEditButton(false);
               setViewDeleteButton((prev) => !prev);
             }}
-            disabled={isDisabled}
-            className={`${
-              isDisabled && "opacity-50 cursor-not-allowed"
-            } h-[1.8rem] text-white w-24  rounded transition hover:brightness-75 bg-red-600`}
-          >
-            Excluir
-          </button>
+          />
         </div>
         {data && (
           <div className="flex flex-wrap gap-4">
             {data.folders ? (
-              data.folders.map(({ id, name, description, links }) => (
-                <FolderCard
-                  key={id}
-                  data={{
-                    id,
-                    name,
-                    description,
-                    quantityOfLinks: links.length,
-                  }}
-                  viewButtons={{
-                    edit: viewEditButton,
-                    delete: viewDeleteButton,
-                  }}
-                />
-              ))
+              data.folders.map(({ id, name, description, links }) => {
+                const quantityOfLinks = links.length;
+
+                return (
+                  <MemoizedFolderCard
+                    key={id}
+                    data={{
+                      id,
+                      name,
+                      description,
+                      quantityOfLinks,
+                    }}
+                    viewButtons={{
+                      edit: viewEditButton,
+                      delete: viewDeleteButton,
+                    }}
+                  />
+                );
+              })
             ) : (
               <p>Ainda não existe nenhuma página</p>
             )}
