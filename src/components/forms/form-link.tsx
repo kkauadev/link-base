@@ -1,15 +1,12 @@
 "use client";
 
-import { fetcher } from "@/functions/fetcher-data";
 import { useParams, useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { memo, useState } from "react";
 import { SuccessMessage } from "../messages/message-success";
 import { CustomError } from "@/types/custom-error";
 import { getAllCookies } from "@/functions/get-cookies";
 import { TextareaField } from "../fields/textarea-field";
 import { FormButton } from "../buttons/forms-button";
-import { baseUrl } from "@/constants/base-url";
-import { Input } from "postcss";
 import { InputField } from "../fields/input-field";
 import { createOrUpdateData } from "@/services/create-data";
 
@@ -21,7 +18,7 @@ interface FormFoldersProps {
   type: "create" | "update";
 }
 
-export const FormLink = ({
+const FormLinkLocal = ({
   inputTitleValue = "",
   inputLinkValue = "",
   textareaDescriptionValue = "",
@@ -139,3 +136,5 @@ export const FormLink = ({
     </>
   );
 };
+
+export const FormLink = memo(FormLinkLocal);

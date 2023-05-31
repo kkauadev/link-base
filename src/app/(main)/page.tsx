@@ -21,7 +21,7 @@ export default function Home() {
 
   const { data, error } = useSWR(
     stored && `${baseUrl}/user/${stored.id}`,
-    (url) => getData<User>(url, stored)
+    (url) => getData<User>(url, stored, "homepage")
   );
 
   const isDisabled = data?.folders?.length === 0;

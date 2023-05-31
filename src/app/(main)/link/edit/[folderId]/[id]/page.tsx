@@ -14,9 +14,9 @@ export default function FolderEdit() {
 
   const { data } = useSWR(
     `${baseUrl}/links/${id}`,
-    (url) => getData<Link>(url, stored),
+    (url) => getData<Link>(url, stored, "editlinkpage" + id),
     {
-      revalidateOnMount: true,
+      revalidateOnMount: false,
     }
   );
 

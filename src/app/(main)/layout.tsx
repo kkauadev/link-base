@@ -20,9 +20,9 @@ export default function MainLayout({
 
   const { data } = useSWR(
     stored && `${baseUrl}/user/${stored.id}`,
-    (url) => getData<User>(url, stored),
+    (url) => getData<User>(url, stored, "layoutpage" + stored?.id),
     {
-      revalidateOnMount: true,
+      revalidateOnMount: false,
     }
   );
 

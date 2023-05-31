@@ -2,9 +2,8 @@
 
 import { CustomError } from "@/types/custom-error";
 import { useRouter, useParams } from "next/navigation";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { SuccessMessage } from "../messages/message-success";
-import { baseUrl } from "@/constants/base-url";
 import { getAllCookies } from "@/functions/get-cookies";
 import { ErrorMessage } from "../messages/message-error";
 import { TextareaField } from "../fields/textarea-field";
@@ -20,7 +19,7 @@ interface FormFoldersProps {
   type: "create" | "update";
 }
 
-export const FormFolders = ({
+export const FormFoldersLocal = ({
   inputNameValue = "",
   textareaDescriptionValue = "",
   placeholders = "",
@@ -143,3 +142,5 @@ export const FormFolders = ({
     </>
   );
 };
+
+export const FormFolders = memo(FormFoldersLocal);

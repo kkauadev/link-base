@@ -27,11 +27,15 @@ export default function FolderPage() {
 
   const { data, error } = useSWR(
     `${baseUrl}/folder/${id}`,
-    (url) => getData<Folder>(url, stored),
+    (url) => getData<Folder>(url, stored, `folderpage${id}}`),
     {
-      revalidateOnMount: true,
+      revalidateOnMount: false,
     }
   );
+
+  const handleDelete = async () => {
+    await deleteData(stored, id, () => push("/"), "folders");
+  };
 
   return (
     <>
@@ -44,7 +48,7 @@ export default function FolderPage() {
       )}
       <section className="flex flex-col-reverse items-center lg:items-stretch lg:flex-row gap-4 mt-6 sm:mt-10 mb-5">
         <ul className="flex flex-col gap-4 w-full sm:pr-6">
-          {data?.links?.length != 0 && (
+          {data?.links?.length !== 0 && (
             <>
               {data?.links?.map((link) => {
                 return <LinkCard key={link.id} link={link} />;
@@ -77,7 +81,7 @@ export default function FolderPage() {
               </button>
             </Link>
             <button
-              onClick={() => deleteData(stored, id, () => push("/"), "folders")}
+              onClick={handleDelete}
               className={`h-[2rem] text-white w-1/2 bg-red-600  flex items-center justify-center text-2xl px-2 py-1  rounded transition hover:brightness-75`}
             >
               <IconDelete />

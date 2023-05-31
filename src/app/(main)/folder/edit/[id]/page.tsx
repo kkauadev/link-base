@@ -14,9 +14,9 @@ export default function FolderEdit() {
 
   const { data, isLoading, error } = useSWR(
     `${baseUrl}/folder/${id}`,
-    (url) => getData<Folder>(url, stored),
+    (url) => getData<Folder>(url, stored, "editfolderpage" + id),
     {
-      revalidateOnMount: true,
+      revalidateOnMount: false,
     }
   );
 
