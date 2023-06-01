@@ -1,30 +1,44 @@
-"use client";
-
 import { baseUrl } from "@/constants/base-url";
 import { getUserToken } from "@/functions/get-user-token";
 import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
 import Link from "next/link";
-import { useState } from "react";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
-import useSWR from "swr";
+import { cookies } from "next/headers";
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [viewMenu, setViewMenu] = useState(false);
+  const storedCookies = cookies();
+  const id = storedCookies.get("id");
+  const token = storedCookies.get("token");
 
-  const stored = getUserToken();
-
-  const { data } = useSWR(
-    stored && `${baseUrl}/user/${stored.id}`,
-    (url) => getData<User>(url, stored, "layoutpage" + stored?.id),
-    {
-      revalidateOnMount: false,
+  const get = async () => {
+    if (!id || !token) return null;
+    try {
+      const res = await fetch(`${baseUrl}/user/${id.value}`, {
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+        next: {
+          revalidate: 10,
+        },
+      });
+      return res;
+    } catch (error) {
+      return null;
     }
-  );
+  };
+
+  const res = await get();
+
+  if (!res || !res.ok) {
+    return <div>Erro ao carregar dados</div>;
+  }
+
+  const data: User = await res.json();
 
   return (
     <>
@@ -36,38 +50,40 @@ export default function MainLayout({
           >
             Home
           </Link>
-          <button
-            onClick={() => setViewMenu((prev) => !prev)}
-            className="text-3xl transition hover:brightness-75 hover:scale-75"
+          <label
+            htmlFor="toggle-menu-input"
+            className="label-menu text-3xl transition hover:brightness-75 hover:scale-75"
           >
             <IconMenu />
-          </button>
-          {data && (
-            <div
-              className={`${
-                viewMenu ? "flex" : "hidden"
-              } z-10 border-2 border-primary flex-col gap-4 absolute right-5 top-14 bg-secondary p-4 px-2 rounded-md`}
-            >
-              <div className="bg-tertiary p-2 rounded">
-                <span className="text-sm cursor-default">Perfil</span>
-                <h2 className="text-2xl cursor-default w-full text-ellipsis">
-                  {data.name}
-                </h2>
-              </div>
-              <Link
-                className="text-xl px-2 transition hover:brightness-75"
-                href="/"
-              >
-                Minhas pastas
-              </Link>
-              <Link
-                className="text-xl px-2 transition hover:brightness-75"
-                href="/logout"
-              >
-                Sair
-              </Link>
+          </label>
+          <input
+            name="toggle-menu-input"
+            id="toggle-menu-input"
+            type="checkbox"
+            className="toggle-menu"
+          />
+          <div
+            className={`menu z-10 border-2 border-primary flex-col gap-4 mt-4 bg-secondary p-4 px-2 rounded-md`}
+          >
+            <div className="bg-tertiary p-2 rounded">
+              <span className="text-sm cursor-default">Perfil</span>
+              <h2 className="text-2xl cursor-default w-full text-ellipsis">
+                {data.name}
+              </h2>
             </div>
-          )}
+            <Link
+              className="py-2 block text-xl px-2 transition hover:brightness-75"
+              href="/"
+            >
+              Minhas pastas
+            </Link>
+            <Link
+              className="block text-xl px-2 transition hover:brightness-75"
+              href="/logout"
+            >
+              Sair
+            </Link>
+          </div>
         </nav>
       </header>
       <main className="bg-secondary w-full px-4 py-2 sm:px-14 sm:py-8 min-h-screen">
