@@ -46,7 +46,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
             <li className="flex items-center gap-2">
               <button
                 className="text-white"
-                onClick={() => deleteData(stored, link.id, refresh, "links")}
+                onClick={() => deleteData(stored, link.id, "links", refresh)}
               >
                 Excluir
               </button>
