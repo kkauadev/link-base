@@ -1,62 +1,34 @@
 "use client";
 
-import { getUserToken } from "@/functions/get-user-token";
-import { deleteData } from "@/services/delete-data";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  AiOutlineClose as CloseIcon,
-  AiOutlineEdit as EditIcon,
-} from "react-icons/ai";
-
+import dynamic from "next/dynamic";
 interface FolderCardProps {
-  data: {
-    id: string;
-    name: string;
-    description: string;
-    quantityOfLinks?: number;
-  };
-  viewButtons: {
-    edit: boolean;
-    delete: boolean;
-  };
+  id: string;
+  name: string;
+  description: string;
+  quantityOfLinks: number;
 }
 
 export const FolderCard = ({
-  data: { id, name, description, quantityOfLinks },
-  viewButtons,
+  description,
+  id,
+  name,
+  quantityOfLinks,
 }: FolderCardProps) => {
-  const { refresh, push } = useRouter();
-  const stored = getUserToken();
-
   return (
-    <article className="break-words relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
-      <div className="absolute top-[-1rem] right-[-1rem]">
-        {viewButtons.delete && (
-          <button
-            onClick={() => deleteData(stored, id, refresh, "folders")}
-            className="text-white w-8 h-8 flex justify-center items-center rounded-full  bg-red-600 transition hover:brightness-75"
+    <article className="max-h-[9rem] flex flex-col justify-between relative break-words w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
+      <div>
+        <div className="flex justify-between items-center mb-1">
+          <Link
+            href={`/folder/${id}`}
+            className="text-xl font-bold text-secondary hover:underline line-clamp-1 mr-2"
           >
-            <CloseIcon className="text-lg" />
-          </button>
-        )}
-        {viewButtons.edit && (
-          <button
-            onClick={() => push(`/folder/edit/${id}`)}
-            className="text-white w-8 h-8 flex justify-center items-center rounded-full bg-blue-600 transition hover:brightness-75"
-          >
-            <EditIcon className="text-lg" />
-          </button>
-        )}
+            {name}
+          </Link>
+        </div>
+        <p className="line-clamp-2">{description}</p>
       </div>
-      <Link
-        href={`/folder/${id}`}
-        className="text-xl font-bold text-secondary hover:underline"
-      >
-        {name}
-      </Link>
-      <p>{description}</p>
-      <div className="text-sm sm:text-base  mt-1 cursor-default">
+      <div className="text-sm sm:text-base mt-1 cursor-default">
         {quantityOfLinks ? (
           <span className="text-zinc-400">
             Quantidade de links: {quantityOfLinks}
