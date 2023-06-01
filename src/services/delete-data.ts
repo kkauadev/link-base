@@ -3,8 +3,8 @@ import { baseUrl } from "@/constants/base-url";
 export const deleteData = async (
   stored: { token: string; id: string } | undefined,
   id: string,
-  response: () => void,
-  type: "folders" | "links"
+  type: "folders" | "links",
+  response?: () => void
 ) => {
   if (!stored) return console.log("Não há token");
   await fetch(`${baseUrl}/${type}/delete/${id}`, {
@@ -14,7 +14,7 @@ export const deleteData = async (
     },
   }).then((res) => {
     if (res.ok) {
-      response();
+      response && response();
     }
   });
 };

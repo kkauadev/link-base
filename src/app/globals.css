@@ -25,3 +25,7 @@
     --border-secondary: #2c2c2c;
   }
 }
+
+* {
+  word-break: break-all;
+}
