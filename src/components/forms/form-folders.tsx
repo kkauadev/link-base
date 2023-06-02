@@ -17,6 +17,10 @@ interface FormFoldersProps {
   textareaDescriptionValue?: string;
   finishBtnText: "Editar" | "Adicionar";
   type: "create" | "update";
+  paramId: string;
+  cookies?: {
+    token: string;
+  };
 }
 
 export const FormFolders = ({
@@ -25,6 +29,8 @@ export const FormFolders = ({
   placeholders = "",
   finishBtnText,
   type,
+  cookies,
+  paramId,
 }: FormFoldersProps) => {
   const [successMessage, setSuccessMessage] = useState(false);
   const [inputName, setInputName] = useState(inputNameValue);
@@ -36,9 +42,6 @@ export const FormFolders = ({
     show: false,
   });
 
-  const cookies = getAllCookies();
-
-  const { id } = useParams();
   const { push } = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +59,7 @@ export const FormFolders = ({
         },
         "folders",
         type,
-        id,
+        paramId,
         cookies.token
       );
 
@@ -84,7 +87,9 @@ export const FormFolders = ({
           onCloseMap={{
             show: () => {
               setSuccessMessage(false);
-              finishBtnText === "Adicionar" ? push("/") : push(`/folder/${id}`);
+              finishBtnText === "Adicionar"
+                ? push("/")
+                : push(`/folder/${paramId}`);
             },
           }}
         />
@@ -134,7 +139,7 @@ export const FormFolders = ({
             text="Cancelar"
             type="button"
             onClickMap={{
-              click: () => push(!id ? "/" : `/folder/${id}`),
+              click: () => push(!paramId ? "/" : `/folder/${paramId}`),
             }}
           />
         </div>

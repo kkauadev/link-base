@@ -7,22 +7,20 @@ import { AiOutlineDelete as IconDelete } from "react-icons/ai";
 interface DeleteFolderButtonProps {
   id: string;
   token: string;
-  params: { id: string };
+  paramsId: string;
 }
 
 export const DeleteFolderButton = ({
   id,
-  params,
+  paramsId,
   token,
 }: DeleteFolderButtonProps) => {
   const { push } = useRouter();
 
   const handleDelete = async () => {
-    await deleteData({ id: id, token: token }, params.id, "folders").then(
-      () => {
-        push("/");
-      }
-    );
+    await deleteData({ id: id, token: token }, paramsId, "folders").then(() => {
+      push("/");
+    });
   };
   return (
     <button

@@ -1,37 +1,44 @@
+"use client";
+
 import { FormFolders } from "@/components/forms/form-folders";
 import { baseUrl } from "@/constants/base-url";
 import { Folder } from "@/types/user";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
+import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
-export default async function FolderEdit({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("token");
+export default async function FolderEdit() {
+  const [data, setData] = useState<Folder | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const get = async (paramId: string) => {
-    try {
-      const res = await fetch(`${baseUrl}/folder/${paramId}`, {
-        headers: {
-          Authorization: `Bearer ${token?.value}`,
-        },
-      });
+  const { id } = useParams();
+  const token = Cookies.get("token");
 
-      return res;
-    } catch (error) {
-      return null;
-    }
-  };
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`${baseUrl}/folder/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          next: {
+            revalidate: 10,
+          },
+        });
 
-  const res = await get(params.id);
-
-  if (!res || !res.ok) {
-    return <div>Erro ao carregar dados</div>;
-  }
-
-  const data: Folder = await res.json();
+        setData(await res.json());
+        setIsLoading(false);
+        setError(false);
+      } catch (error) {
+        setData(null);
+        setIsLoading(false);
+        setError(true);
+      }
+    };
+    getData();
+  }, [id, token]);
 
   return (
     <>
@@ -41,6 +48,8 @@ export default async function FolderEdit({
         type="update"
         inputNameValue={data?.name}
         textareaDescriptionValue={data?.description}
+        paramId={id}
+        cookies={{ token: token ?? "" }}
       />
     </>
   );
