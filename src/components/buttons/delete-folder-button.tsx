@@ -1,21 +1,28 @@
 "use client";
 
-import { AiOutlineDelete as IconDelete } from "react-icons/ai";
+import { deleteData } from "@/services/delete-data";
 import { useRouter } from "next/navigation";
+import { AiOutlineDelete as IconDelete } from "react-icons/ai";
 
 interface DeleteFolderButtonProps {
-  onClickMap: Record<"click", () => void>;
+  id: string;
+  token: string;
+  params: { id: string };
 }
 
-export const DeleteFolderButton = ({ onClickMap }: DeleteFolderButtonProps) => {
+export const DeleteFolderButton = ({
+  id,
+  params,
+  token,
+}: DeleteFolderButtonProps) => {
   const { push } = useRouter();
 
-  const handleDelete = () => {
-    const onClose = onClickMap["click"];
-    if (onClose) {
-      onClose();
-      push("/");
-    }
+  const handleDelete = async () => {
+    await deleteData({ id: id, token: token }, params.id, "folders").then(
+      () => {
+        push("/");
+      }
+    );
   };
   return (
     <button

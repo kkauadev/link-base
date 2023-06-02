@@ -1,15 +1,15 @@
 "use client";
 
-import { CustomError } from "@/types/custom-error";
-import { useRouter, useParams } from "next/navigation";
-import { memo, useState } from "react";
-import { SuccessMessage } from "../messages/message-success";
 import { getAllCookies } from "@/functions/get-cookies";
-import { ErrorMessage } from "../messages/message-error";
-import { TextareaField } from "../fields/textarea-field";
-import { InputField } from "../fields/input-field";
-import { FormButton } from "../buttons/forms-button";
 import { createOrUpdateData } from "@/services/create-data";
+import { CustomError } from "@/types/custom-error";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { FormButton } from "../buttons/forms-button";
+import { InputField } from "../fields/input-field";
+import { TextareaField } from "../fields/textarea-field";
+import { ErrorMessage } from "../messages/message-error";
+import { SuccessMessage } from "../messages/message-success";
 
 interface FormFoldersProps {
   inputNameValue?: string;
@@ -19,7 +19,7 @@ interface FormFoldersProps {
   type: "create" | "update";
 }
 
-export const FormFoldersLocal = ({
+export const FormFolders = ({
   inputNameValue = "",
   textareaDescriptionValue = "",
   placeholders = "",
@@ -142,5 +142,3 @@ export const FormFoldersLocal = ({
     </>
   );
 };
-
-export const FormFolders = memo(FormFoldersLocal);

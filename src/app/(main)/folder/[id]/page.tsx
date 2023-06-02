@@ -1,14 +1,13 @@
+import { DeleteFolderButton } from "@/components/buttons/delete-folder-button";
 import { LinkCard } from "@/components/cards/link-card";
 import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
-import { deleteData } from "@/services/delete-data";
 import { Folder } from "@/types/user";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { DeleteFolderButton } from "../../../../components/buttons/delete-folder-button";
 import { AiOutlinePlus as IconPlus } from "react-icons/ai";
 
 export default async function FolderPage({
@@ -47,17 +46,6 @@ export default async function FolderPage({
 
   const data: Folder = await res.json();
 
-  const handleDelete = async () => {
-    "use server";
-    if (!id || !token) return;
-
-    await deleteData(
-      { id: id.value, token: token.value },
-      params.id,
-      "folders"
-    );
-  };
-
   return (
     <>
       {data && (
@@ -88,14 +76,14 @@ export default async function FolderPage({
                 </Link>
                 <Link
                   className="h-[2rem] text-center text-white w-full bg-blue-600 px-2 py-1 rounded transition hover:brightness-75"
-                  href={`/folder/edit/${id?.value}`}
+                  href={`/folder/edit/${params.id}`}
                 >
                   Editar
                 </Link>
                 <DeleteFolderButton
-                  onClickMap={{
-                    click: handleDelete,
-                  }}
+                  id={id ? id.value : ""}
+                  params={params}
+                  token={token ? token.value : ""}
                 />
               </section>
               <section className="text-sm sm:text-base flex flex-col gap-2 border-2 border-primary rounded p-3 sm:p-4">

@@ -1,5 +1,6 @@
 "use client";
 
+import { baseUrl } from "@/constants/base-url";
 import { fetcherUser } from "@/functions/fetcher-data";
 import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
@@ -8,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { FormInput } from "./form-input";
-import { baseUrl } from "@/constants/base-url";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");

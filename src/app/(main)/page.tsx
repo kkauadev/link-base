@@ -51,13 +51,13 @@ export default async function Home() {
         {data && (
           <div className="flex flex-wrap gap-4">
             {data.folders ? (
-              data.folders.map(({ id, name, description, links }) => {
+              data.folders.map(({ id: folderId, name, description, links }) => {
                 const quantityOfLinks = links.length;
                 return (
                   <FolderCard
-                    key={id}
+                    key={folderId}
                     description={description}
-                    id={id}
+                    id={folderId}
                     name={name}
                     quantityOfLinks={quantityOfLinks}
                   />

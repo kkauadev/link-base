@@ -1,39 +1,47 @@
-"use client";
-
 import { FormFolders } from "@/components/forms/form-folders";
 import { baseUrl } from "@/constants/base-url";
-import { getUserToken } from "@/functions/get-user-token";
-import { getData } from "@/services/get-data";
 import { Folder } from "@/types/user";
-import { useParams } from "next/navigation";
-import useSWR from "swr";
+import { cookies } from "next/headers";
 
-export default function FolderEdit() {
-  const { id } = useParams();
-  const stored = getUserToken();
+export default async function FolderEdit({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
 
-  const { data, isLoading, error } = useSWR(
-    `${baseUrl}/folder/${id}`,
-    (url) => getData<Folder>(url, stored, "editfolderpage" + id),
-    {
-      revalidateOnMount: false,
+  const get = async (paramId: string) => {
+    try {
+      const res = await fetch(`${baseUrl}/folder/${paramId}`, {
+        headers: {
+          Authorization: `Bearer ${token?.value}`,
+        },
+      });
+
+      return res;
+    } catch (error) {
+      return null;
     }
-  );
+  };
+
+  const res = await get(params.id);
+
+  if (!res || !res.ok) {
+    return <div>Erro ao carregar dados</div>;
+  }
+
+  const data: Folder = await res.json();
 
   return (
     <>
       <h1 className="w-[calc(50vw-3.5rem)] text-3xl">Edite a pasta</h1>
-      {data && (
-        <FormFolders
-          finishBtnText="Editar"
-          type="update"
-          inputNameValue={data?.name}
-          textareaDescriptionValue={data?.description}
-          placeholders={isLoading ? "Carregando..." : "Digite aqui"}
-        />
-      )}
-      {isLoading && <p>Carregando...</p>}
-      {error && <p>Erro ao carregar</p>}
+      <FormFolders
+        finishBtnText="Editar"
+        type="update"
+        inputNameValue={data?.name}
+        textareaDescriptionValue={data?.description}
+      />
     </>
   );
 }

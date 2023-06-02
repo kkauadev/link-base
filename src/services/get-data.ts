@@ -8,13 +8,10 @@ export const getData = async <T>(
   if (stored) {
     const cookies = Cookies.get(cookieName);
     if (cookies) {
-      console.log("cookie");
       const cookie: T = JSON.parse(cookies);
 
       return cookie;
     }
-
-    console.log("fetch");
 
     const res = await fetch(url, {
       method: "GET",

@@ -1,10 +1,8 @@
 import { baseUrl } from "@/constants/base-url";
-import { getUserToken } from "@/functions/get-user-token";
-import { getData } from "@/services/get-data";
 import { User } from "@/types/user";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
-import { cookies } from "next/headers";
 
 export default async function MainLayout({
   children,

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 interface FolderCardProps {
   id: string;
   name: string;
