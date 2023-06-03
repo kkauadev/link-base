@@ -1,9 +1,8 @@
 "use client";
 
-import { getAllCookies } from "@/functions/get-cookies";
 import { createOrUpdateData } from "@/services/create-data";
 import { CustomError } from "@/types/custom-error";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormButton } from "../buttons/forms-button";
 import { InputField } from "../fields/input-field";

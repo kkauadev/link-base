@@ -6,7 +6,6 @@ import { useGetData } from "@/hooks/get-data";
 import { Folder } from "@/types/user";
 import Cookies from "js-cookie";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
 
 export default async function FolderEdit() {
   const { id } = useParams();

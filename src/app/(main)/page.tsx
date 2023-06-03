@@ -2,10 +2,10 @@
 
 import { FolderCard } from "@/components/cards/folder-card";
 import { baseUrl } from "@/constants/base-url";
-import { User } from "@/types/user";
-import Link from "next/link";
-import Cookies from "js-cookie";
 import { useGetData } from "@/hooks/get-data";
+import { User } from "@/types/user";
+import Cookies from "js-cookie";
+import Link from "next/link";
 
 export default function Home() {
   const id = Cookies.get("id");

@@ -4,7 +4,6 @@ import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
-import { getUserToken } from "@/functions/get-user-token";
 import { deleteData } from "@/services/delete-data";
 import { Link as LinkType } from "@/types/user";
 import Link from "next/link";

@@ -6,8 +6,8 @@ import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AiOutlineClose as IconClose } from "react-icons/ai";
 import { useState } from "react";
+import { AiOutlineClose as IconClose } from "react-icons/ai";
 
 export default function Login() {
   const [username, setUsername] = useState("");

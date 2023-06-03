@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { FormInput } from "@/components/forms/form-input";
 import { baseUrl } from "@/constants/base-url";
 import { CustomError } from "@/types/custom-error";
-import { FormInput } from "@/components/forms/form-input";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { AiOutlineClose as IconClose } from "react-icons/ai";
 
 export default function SignUp() {

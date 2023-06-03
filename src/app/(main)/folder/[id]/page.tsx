@@ -7,13 +7,12 @@ import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
-import { Folder } from "@/types/user";
-import Link from "next/link";
-import { AiOutlinePlus as IconPlus } from "react-icons/ai";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { useGetData } from "@/hooks/get-data";
+import { Folder } from "@/types/user";
+import Cookies from "js-cookie";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { AiOutlinePlus as IconPlus } from "react-icons/ai";
 
 export default function FolderPage() {
   const { id: paramId } = useParams();

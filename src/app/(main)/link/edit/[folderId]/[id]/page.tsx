@@ -2,11 +2,10 @@
 
 import { FormLink } from "@/components/forms/form-link";
 import { baseUrl } from "@/constants/base-url";
-import { Link } from "@/types/user";
-import { useParams } from "next/navigation";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
 import { useGetData } from "@/hooks/get-data";
+import { Link } from "@/types/user";
+import Cookies from "js-cookie";
+import { useParams } from "next/navigation";
 
 export default function FolderEdit() {
   const { id } = useParams();
