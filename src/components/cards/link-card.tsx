@@ -8,7 +8,7 @@ import { getUserToken } from "@/functions/get-user-token";
 import { deleteData } from "@/services/delete-data";
 import { Link as LinkType } from "@/types/user";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   AiOutlineCaretDown as IconArrowDown,
@@ -17,14 +17,17 @@ import {
 
 interface LinkCardProps {
   link: LinkType;
+  paramsId: string;
+  stored: {
+    token: string;
+    id: string;
+  };
 }
 
-export const LinkCard = ({ link }: LinkCardProps) => {
+export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
   const [viewDescription, setViewDescription] = useState(false);
   const [viewOptions, setViewOptions] = useState(false);
   const { refresh } = useRouter();
-  const { id } = useParams();
-  const stored = getUserToken();
 
   return (
     <li className="max-w-5xl w-full bg-tertiary p-4 rounded">
@@ -39,7 +42,7 @@ export const LinkCard = ({ link }: LinkCardProps) => {
         {viewOptions && (
           <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow">
             <li className="flex items-center gap-2">
-              <Link href={`/link/edit/${id}/${link.id}` || "#"}>
+              <Link href={`/link/edit/${paramsId}/${link.id}` || "#"}>
                 <button className="text-white">Editar</button>
               </Link>
             </li>

@@ -5,40 +5,16 @@ import { baseUrl } from "@/constants/base-url";
 import { User } from "@/types/user";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
+import { useGetData } from "@/hooks/get-data";
 
 export default function Home() {
-  const [data, setData] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-
   const id = Cookies.get("id");
   const token = Cookies.get("token");
 
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`${baseUrl}/user/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          next: {
-            revalidate: 10,
-          },
-        });
-
-        setData(await res.json());
-        setIsLoading(false);
-        setError(false);
-      } catch (error) {
-        setData(null);
-        setIsLoading(false);
-        setError(true);
-      }
-    };
-    getData();
-  }, [id, token]);
+  const { data, error, isLoading } = useGetData<User>(
+    `${baseUrl}/user/${id}`,
+    token ?? ""
+  );
 
   return (
     <>

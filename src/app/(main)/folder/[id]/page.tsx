@@ -13,48 +13,25 @@ import { AiOutlinePlus as IconPlus } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useGetData } from "@/hooks/get-data";
 
-export default async function FolderPage() {
-  const [data, setData] = useState<Folder | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-
+export default function FolderPage() {
   const { id: paramId } = useParams();
 
   const id = Cookies.get("id");
   const token = Cookies.get("token");
 
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`${baseUrl}/folder/${paramId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          next: {
-            revalidate: 10,
-          },
-        });
-
-        setData(await res.json());
-        setIsLoading(false);
-        setError(false);
-      } catch (error) {
-        setData(null);
-        setIsLoading(false);
-        setError(true);
-      }
-    };
-    getData();
-  }, [id, token, paramId]);
+  const { data, error, isLoading } = useGetData<Folder>(
+    `${baseUrl}/folder/${paramId}`,
+    token ?? ""
+  );
 
   return (
     <>
       {data && (
         <>
           <h1 className="sm:w-[calc(50vw-3.5rem)] text-xl sm:text-3xl">
-            Pasta {data.name}
+            Pasta {data?.name}
           </h1>
           <section className="flex flex-col-reverse items-center lg:items-stretch lg:flex-row gap-4 mt-6 sm:mt-10 mb-5">
             <ul className="flex flex-col gap-4 w-full sm:pr-6">
@@ -65,7 +42,14 @@ export default async function FolderPage() {
                 </li>
               ) : (
                 data.links.map((link) => {
-                  return <LinkCard key={link.id} link={link} />;
+                  return (
+                    <LinkCard
+                      key={link.id}
+                      link={link}
+                      paramsId={paramId}
+                      stored={{ token: token ?? "", id: id ?? "" }}
+                    />
+                  );
                 })
               )}
             </ul>
@@ -106,16 +90,8 @@ export default async function FolderPage() {
           </section>
         </>
       )}
-      {error && (
-        <div className="text-xl">
-          <p>Erro ao carregar dados</p>
-        </div>
-      )}
-      {isLoading && (
-        <div className="text-xl">
-          <p>Carregando...</p>
-        </div>
-      )}
+      {isLoading && <p>Carregando...</p>}
+      {error && <p>Erro ao carregar dados</p>}
     </>
   );
 }

@@ -6,40 +6,16 @@ import { Link } from "@/types/user";
 import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import { useGetData } from "@/hooks/get-data";
 
 export default function FolderEdit() {
-  const [data, setData] = useState<Link | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
-
   const { id } = useParams();
   const token = Cookies.get("token");
 
-  useEffect(() => {
-    const getData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`${baseUrl}/links/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          next: {
-            revalidate: 10,
-          },
-        });
-
-        setData(await res.json());
-        setIsLoading(false);
-        setError(false);
-        return data;
-      } catch (error) {
-        setData(null);
-        setIsLoading(false);
-        setError(true);
-      }
-    };
-    getData();
-  }, [id, data, token]);
+  const { data, error, isLoading } = useGetData<Link>(
+    `${baseUrl}/links/${id}`,
+    token ?? ""
+  );
 
   return (
     <>
