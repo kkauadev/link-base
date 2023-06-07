@@ -12,6 +12,7 @@ import { Folder } from "@/types/user";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { memo } from "react";
 import { AiOutlinePlus as IconPlus } from "react-icons/ai";
 
 export default function FolderPage() {
@@ -24,6 +25,8 @@ export default function FolderPage() {
     `${baseUrl}/folder/${paramId}`,
     token ?? ""
   );
+
+  const MemoizedLinkCard = memo(LinkCard);
 
   return (
     <>
@@ -42,7 +45,7 @@ export default function FolderPage() {
               ) : (
                 data.links.map((link) => {
                   return (
-                    <LinkCard
+                    <MemoizedLinkCard
                       key={link.id}
                       link={link}
                       paramsId={paramId}

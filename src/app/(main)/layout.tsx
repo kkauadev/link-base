@@ -1,13 +1,25 @@
 "use client";
 
+import { baseUrl } from "@/constants/base-url";
+import { useGetData } from "@/hooks/get-data";
+import { User } from "@/types/user";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
 
-export default async function MainLayout({
+export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const id = Cookies.get("id");
+  const token = Cookies.get("token");
+
+  const { data, error, isLoading } = useGetData<User>(
+    `${baseUrl}/user/${id}`,
+    token ?? ""
+  );
+
   return (
     <>
       <header className="bg-secondary">
@@ -35,7 +47,9 @@ export default async function MainLayout({
           >
             <div className="bg-tertiary p-2 rounded">
               <span className="text-sm cursor-default">Perfil</span>
-              <h2 className="text-2xl cursor-default w-full text-ellipsis"></h2>
+              <h2 className="text-2xl cursor-default w-full text-ellipsis">
+                {data?.name}
+              </h2>
             </div>
             <Link
               className="py-2 block text-xl px-2 transition hover:brightness-75"

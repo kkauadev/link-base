@@ -7,7 +7,7 @@ import { Folder } from "@/types/user";
 import Cookies from "js-cookie";
 import { useParams } from "next/navigation";
 
-export default async function FolderEdit() {
+export default function FolderEdit() {
   const { id } = useParams();
   const token = Cookies.get("token");
 

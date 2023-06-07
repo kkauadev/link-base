@@ -24,7 +24,7 @@ export default function Home() {
         <div>
           {data && (
             <Link
-              href={`/folder/create/${token}`}
+              href={`/folder/create/${id}`}
               className={`w-[10rem] px-4 py-2 items-center flex gap-4 text-white rounded transition hover:brightness-75 bg-green-600`}
             >
               <span>Criar nova pasta</span>
