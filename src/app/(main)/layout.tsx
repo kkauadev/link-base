@@ -1,6 +1,9 @@
+"use client";
+
 import { baseUrl } from "@/constants/base-url";
+import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
 
@@ -9,34 +12,13 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const storedCookies = cookies();
-  const id = storedCookies.get("id");
-  const token = storedCookies.get("token");
+  const id = Cookies.get("id");
+  const token = Cookies.get("token");
 
-  const get = async () => {
-    if (!id || !token) return null;
-    try {
-      const res = await fetch(`${baseUrl}/user/${id.value}`, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-        next: {
-          revalidate: 10,
-        },
-      });
-      return res;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  const res = await get();
-
-  if (!res || !res.ok) {
-    return <div>Erro ao carregar dados</div>;
-  }
-
-  const data: User = await res.json();
+  const { data, error, isLoading } = useGetData<User>(
+    `${baseUrl}/user/${id}`,
+    token ?? ""
+  );
 
   return (
     <>
@@ -66,7 +48,7 @@ export default async function MainLayout({
             <div className="bg-tertiary p-2 rounded">
               <span className="text-sm cursor-default">Perfil</span>
               <h2 className="text-2xl cursor-default w-full text-ellipsis">
-                {data.name}
+                {data?.name}
               </h2>
             </div>
             <Link
