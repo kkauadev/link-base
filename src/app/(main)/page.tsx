@@ -10,7 +10,6 @@ import Link from "next/link";
 export default function Home() {
   const id = Cookies.get("id");
   const token = Cookies.get("token");
-
   const { data, error, isLoading } = useGetData<User>(
     `${baseUrl}/user/${id}`,
     token ?? ""

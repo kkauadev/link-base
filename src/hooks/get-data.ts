@@ -14,7 +14,7 @@ export const useGetData = <T>(url: string, token: string) => {
             Authorization: `Bearer ${token}`,
           },
           next: {
-            revalidate: 10,
+            revalidate: 5,
           },
         });
 
