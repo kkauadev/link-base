@@ -1,32 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { baseUrl } from "./constants/base-url";
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get("token");
-  const id = request.cookies.get("id");
+  const token = request.cookies.has("token");
 
-  if (!token || !id) {
+  if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  try {
-    const res = await fetch(`${baseUrl}/user/${id?.value}`, {
-      headers: {
-        Authorization: `Bearer ${token?.value}`,
-      },
-      next: {
-        revalidate: 10,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Not authorized");
-    }
-
-    return;
-  } catch {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  return NextResponse.next();
 }
 
 export const config = {
