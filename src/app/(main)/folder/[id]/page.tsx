@@ -2,6 +2,7 @@
 
 import { DeleteFolderButton } from "@/components/buttons/delete-folder-button";
 import { LinkCard } from "@/components/cards/link-card";
+import { MessageErrorLoad } from "@/components/messages/message-error-load";
 import { baseUrl } from "@/constants/base-url";
 import {
   dateFormatter,
@@ -93,7 +94,7 @@ export default function FolderPage() {
         </>
       )}
       {isLoading && <p>Carregando...</p>}
-      {error && <p>Erro ao carregar dados</p>}
+      {error && <MessageErrorLoad />}
     </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { FolderCard } from "@/components/cards/folder-card";
+import { MessageErrorLoad } from "@/components/messages/message-error-load";
 import { baseUrl } from "@/constants/base-url";
 import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
@@ -52,7 +53,7 @@ export default function Home() {
           </div>
         )}
         {isLoading && <p>Carregando...</p>}
-        {error && <p>Erro ao carregar dados</p>}
+        {error && <MessageErrorLoad />}
       </section>
     </>
   );
