@@ -7,7 +7,6 @@ import { AiOutlineDelete as IconDelete } from "react-icons/ai";
 interface DeleteFolderButtonProps {
   id: string;
   token: string;
-
   paramsId: string;
 }
 
