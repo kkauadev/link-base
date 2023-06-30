@@ -91,6 +91,7 @@ export default function Login() {
                 type="text"
                 name="username-input"
                 id="username-input"
+                data-cy="login-username-input"
               />
             </div>
             <div className="flex flex-col">
@@ -101,6 +102,7 @@ export default function Login() {
                 type={viewPassword ? "text" : "password"}
                 name="password-input"
                 id="password-input"
+                data-cy="login-password-input"
               />
             </div>
             <div className="flex gap-2 items-center px-1">
@@ -111,6 +113,7 @@ export default function Login() {
                 type="checkbox"
                 name="view-password"
                 id="view-password"
+                data-cy="login-show-password-checkbox"
               />
               <label className="text-sm" htmlFor="view-password">
                 Visualizar senha
@@ -124,6 +127,7 @@ export default function Login() {
                 loadingRequest && "brightness-50"
               } text-white w-full bg-quaternary transition rounded-sm p-1 text-lg hover:brightness-75`}
               type="submit"
+              data-cy="login-submit-login-button"
             >
               {loadingRequest ? "Carregando..." : "Entrar"}
             </button>

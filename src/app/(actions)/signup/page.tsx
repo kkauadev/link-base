@@ -29,6 +29,9 @@ export default function SignUp() {
       if (password !== confirmPassword)
         throw new Error("As senhas não coincidem");
 
+      if (password.length < 8 && confirmPassword.length < 8)
+        throw new Error("A senha deve conter no mínimo 8 caracteres");
+
       const res = await fetch(`${baseUrl}/user/create`, {
         method: "POST",
         headers: {
@@ -92,6 +95,7 @@ export default function SignUp() {
                 type="text"
                 name="username-input"
                 id="username-input"
+                data-cy="signup-username-input"
               />
             </div>
             <div className="flex flex-col">
@@ -102,6 +106,7 @@ export default function SignUp() {
                 type={viewPassword ? "text" : "password"}
                 name="password-input"
                 id="password-input"
+                data-cy="signup-password-input"
               />
             </div>
             <div className="flex flex-col">
@@ -112,6 +117,7 @@ export default function SignUp() {
                 type={viewPassword ? "text" : "password"}
                 name="confirm-password-input"
                 id="confirm-password-input"
+                data-cy="signup-password-confirm-input"
               />
             </div>
             <div className="flex gap-2 items-center px-1">
@@ -133,6 +139,7 @@ export default function SignUp() {
               <button
                 className="text-white w-full bg-green-600 transition rounded-sm p-1 text-lg hover:brightness-50"
                 type="submit"
+                data-cy="signup-submit-login-button"
               >
                 Cadastrar
               </button>
