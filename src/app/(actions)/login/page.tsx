@@ -47,7 +47,7 @@ export default function Login() {
 
       Cookies.remove("token");
       Cookies.remove("id");
-      Cookies.set("token", data.token);
+      Cookies.set("token", data.token, { expires: new Date().getHours() + 1 });
       Cookies.set("id", data.id);
 
       route.push("/");
