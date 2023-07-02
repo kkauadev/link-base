@@ -5,6 +5,8 @@ import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { AiOutlineMenu as IconMenu } from "react-icons/ai";
 
 export default function MainLayout({
@@ -12,13 +14,23 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { refresh } = useRouter();
+
   const id = Cookies.get("id");
   const token = Cookies.get("token");
 
-  const { data, error, isLoading } = useGetData<User>(
+  const { data, error } = useGetData<User>(
     `${baseUrl}/user/${id}`,
     token ?? ""
   );
+
+  useEffect(() => {
+    if (error) {
+      Cookies.remove("token");
+      Cookies.remove("id");
+      refresh();
+    }
+  }, [error, refresh]);
 
   return (
     <>
