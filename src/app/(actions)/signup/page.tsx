@@ -29,6 +29,9 @@ export default function SignUp() {
       if (password !== confirmPassword)
         throw new Error("As senhas não coincidem");
 
+      if (username.length < 3)
+        throw new Error("O nome deve conter no mínimo 3 caracteres");
+
       if (password.length < 8 && confirmPassword.length < 8)
         throw new Error("A senha deve conter no mínimo 8 caracteres");
 
