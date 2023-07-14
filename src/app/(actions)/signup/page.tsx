@@ -35,6 +35,21 @@ export default function SignUp() {
       if (password.length < 8 && confirmPassword.length < 8)
         throw new Error("A senha deve conter no mínimo 8 caracteres");
 
+      if (!/[A-Z]/.test(password) && !/[A-Z]/.test(confirmPassword))
+        throw new Error("A senha deve conter pelo menos uma letra maiúscula");
+
+      if (!/[a-z]/.test(password) && !/[a-z]/.test(confirmPassword))
+        throw new Error("A senha deve conter pelo menos uma letra minúscula");
+
+      if (!/[0-9]/.test(password) && !/[0-9]/.test(confirmPassword))
+        throw new Error("A senha deve conter pelo menos um número");
+
+      if (
+        !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password) &&
+        !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(confirmPassword)
+      )
+        throw new Error("A senha deve conter pelo menos um caractere especial");
+
       const res = await fetch(`${baseUrl}/user/create`, {
         method: "POST",
         headers: {
@@ -75,6 +90,14 @@ export default function SignUp() {
               </li>
               <li>
                 <span>A senha deve ter no mínimo 8 caracteres.</span>
+              </li>
+              <li>
+                <span>Incluir números e letras maiúsculas e minúsculas.</span>
+              </li>
+              <li>
+                <span>
+                  Incluir um caractere especial que não seja letra nem número.
+                </span>
               </li>
             </ul>
           </section>

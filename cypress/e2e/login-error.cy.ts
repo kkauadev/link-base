@@ -4,11 +4,14 @@ describe("login error test", () => {
   });
 
   it("Show error message when providing incorrect login data", () => {
-    cy.get('[data-cy="login-username-input"]').type("wrongUsername");
-    cy.get('[data-cy="login-password-input"]').type("wrongPassword");
+    cy.get('[data-cy="login-username-input"]').type("wrong Username");
+    cy.get('[data-cy="login-password-input"]').type("wrong Password");
 
     cy.get('[data-cy="login-submit-login-button"]').click();
 
+    cy.get('[data-cy="login-submit-login-button"]')
+      .contains("Entrar")
+      .should("be.visible");
     cy.contains("Usuário ou senha incorretos").should("be.visible");
   });
 
