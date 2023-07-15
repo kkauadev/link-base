@@ -1,13 +1,14 @@
 "use client";
 
-import { FormInput } from "@/components/forms/form-input";
-import { baseUrl } from "@/constants/base-url";
-import { CustomError } from "@/types/custom-error";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { AiOutlineClose as IconClose } from "react-icons/ai";
+
+import { FormInput } from "@/components/forms/form-input";
+import { IconClose } from "@/components/icons";
+import { baseUrl } from "@/constants/base-url";
+import { CustomError } from "@/types/custom-error";
 
 export default function Login() {
   const [username, setUsername] = useState("");

@@ -1,13 +1,14 @@
 "use client";
 
-import { baseUrl } from "@/constants/base-url";
-import { useGetData } from "@/hooks/get-data";
-import { User } from "@/types/user";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { AiOutlineMenu as IconMenu } from "react-icons/ai";
+
+import { IconMenu } from "@/components/icons";
+import { baseUrl } from "@/constants/base-url";
+import { useGetData } from "@/hooks/get-data";
+import { User } from "@/types/user";
 
 export default function MainLayout({
   children,

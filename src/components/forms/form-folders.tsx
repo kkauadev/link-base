@@ -1,14 +1,15 @@
 "use client";
 
-import { createOrUpdateData } from "@/services/create-data";
-import { CustomError } from "@/types/custom-error";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FormButton } from "../buttons/forms-button";
-import { InputField } from "../fields/input-field";
-import { TextareaField } from "../fields/textarea-field";
-import { ErrorMessage } from "../messages/message-error";
-import { SuccessMessage } from "../messages/message-success";
+
+import { FormButton } from "@/components/buttons/forms-button";
+import { InputField } from "@/components/fields/input-field";
+import { TextareaField } from "@/components/fields/textarea-field";
+import { ErrorMessage } from "@/components/messages/message-error";
+import { SuccessMessage } from "@/components/messages/message-success";
+import { createOrUpdateData } from "@/services/create-data";
+import { CustomError } from "@/types/custom-error";
 
 interface FormFoldersProps {
   inputNameValue?: string;

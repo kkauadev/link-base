@@ -1,7 +1,13 @@
 "use client";
 
+import Cookies from "js-cookie";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { memo } from "react";
+
 import { DeleteFolderButton } from "@/components/buttons/delete-folder-button";
 import { LinkCard } from "@/components/cards/link-card";
+import { IconPlus } from "@/components/icons";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
 import { baseUrl } from "@/constants/base-url";
 import {
@@ -10,11 +16,6 @@ import {
 } from "@/functions/date-formatter";
 import { useGetData } from "@/hooks/get-data";
 import { Folder } from "@/types/user";
-import Cookies from "js-cookie";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { memo } from "react";
-import { AiOutlinePlus as IconPlus } from "react-icons/ai";
 
 export default function FolderPage() {
   const { id: paramId } = useParams();

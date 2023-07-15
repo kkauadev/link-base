@@ -1,6 +1,6 @@
 "use client";
 
-import { AiOutlineClose as IconClose } from "react-icons/ai";
+import { IconClose } from "../icons";
 
 interface FormButtonProps {
   message: string;

@@ -1,8 +1,9 @@
 "use client";
 
-import { FormFolders } from "@/components/forms/form-folders";
 import Cookies from "js-cookie";
 import { useParams } from "next/navigation";
+
+import { FormFolders } from "@/components/forms/form-folders";
 
 export default function FolderCreate() {
   const { id } = useParams();

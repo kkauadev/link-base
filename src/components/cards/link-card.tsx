@@ -1,18 +1,16 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   dateFormatter,
   relativeDateFormatter,
 } from "@/functions/date-formatter";
 import { deleteData } from "@/services/delete-data";
 import { Link as LinkType } from "@/types/user";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  AiOutlineCaretDown as IconArrowDown,
-  AiOutlineEllipsis as IconEllipsis,
-} from "react-icons/ai";
+import { IconArrowDown, IconEllipsis } from "../icons";
 
 interface LinkCardProps {
   link: LinkType;

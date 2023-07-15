@@ -1,8 +1,9 @@
 "use client";
 
-import { deleteData } from "@/services/delete-data";
 import { useRouter } from "next/navigation";
-import { AiOutlineDelete as IconDelete } from "react-icons/ai";
+
+import { deleteData } from "@/services/delete-data";
+import { IconDelete } from "../icons";
 
 interface DeleteFolderButtonProps {
   id: string;
