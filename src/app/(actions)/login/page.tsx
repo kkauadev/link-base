@@ -9,6 +9,7 @@ import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
 import { baseUrl } from "@/constants/base-url";
 import { CustomError } from "@/types/custom-error";
+import { loginRequest } from "@/services/login";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -28,13 +29,7 @@ export default function Login() {
       setLoadingRequest(true);
       if (!username || !password) throw new Error("Preencha todos os campos");
 
-      const res = await fetch(`${baseUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await loginRequest(baseUrl, username, password);
 
       if (res.status === 401) {
         throw new Error("Usuário ou senha incorretos");
