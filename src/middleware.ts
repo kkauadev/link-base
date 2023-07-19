@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { baseUrl } from "./constants/base-url";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.has("token");

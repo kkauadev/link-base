@@ -7,7 +7,6 @@ import { useState } from "react";
 
 import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
-import { baseUrl } from "@/constants/base-url";
 import { CustomError } from "@/types/custom-error";
 import { loginRequest } from "@/services/login";
 
@@ -29,7 +28,7 @@ export default function Login() {
       setLoadingRequest(true);
       if (!username || !password) throw new Error("Preencha todos os campos");
 
-      const res = await loginRequest(baseUrl, username, password);
+      const res = await loginRequest(username, password);
 
       if (res.status === 401) {
         throw new Error("Usuário ou senha incorretos");
