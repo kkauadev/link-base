@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "./button";
+
 interface FormButtonProps {
   type?: "button" | "submit" | "reset";
   text: string;
@@ -23,12 +25,12 @@ export const FormButton = ({
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
-      className={`ext-white w-24 p-[0.1rem] rounded transition hover:brightness-75 bg-${backgroundColor}-600`}
+      className={`w-36 p-[0.2rem] bg-${backgroundColor}-600`}
       type={type}
     >
       {text}
-    </button>
+    </Button>
   );
 };

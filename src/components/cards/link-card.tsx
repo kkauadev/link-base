@@ -37,7 +37,7 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
           <IconEllipsis />
         </button>
         {viewOptions && (
-          <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow">
+          <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow z-20">
             <li className="flex items-center gap-2">
               <Link href={`/link/edit/${paramsId}/${link.id}` || "#"}>
                 <button className="text-white">Editar</button>
@@ -62,7 +62,7 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
       </Link>
       {viewDescription && (
         <div className="flex flex-col gap-6 text-sm sm:text-base">
-          <p className={`break-words mt-1 `}>{link.description}</p>
+          <p className={`mt-1 `}>{link.description}</p>
           <ul>
             <li>Data de criação: {dateFormatter(new Date(link.createDate))}</li>
             <li>

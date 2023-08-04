@@ -23,35 +23,38 @@ export default function Home() {
         Minhas pastas
       </h1>
       <section className="flex flex-col gap-4 mt-10 mb-5">
-        <div>
-          {data && (
-            <Link
-              href={`/folder/create/${id}`}
-              className={`w-[10rem] px-4 py-2 items-center flex gap-4 text-white rounded transition hover:brightness-75 bg-green-600`}
-            >
-              <span>Criar nova pasta</span>
-            </Link>
-          )}
-        </div>
         {data && (
-          <div className="flex flex-wrap gap-4">
-            {data.folders ? (
-              data.folders.map(({ id: folderId, name, description, links }) => {
-                const quantityOfLinks = links.length;
-                return (
-                  <FolderCard
-                    key={folderId}
-                    description={description}
-                    id={folderId}
-                    name={name}
-                    quantityOfLinks={quantityOfLinks}
-                  />
-                );
-              })
-            ) : (
-              <p>Ainda não existe nenhuma página</p>
-            )}
-          </div>
+          <>
+            <div>
+              <Link
+                role={"button"}
+                href={`/folder/create/${id}`}
+                className={`w-[10rem] px-4 py-2 items-center flex gap-4 text-white rounded transition hover:brightness-75 bg-green-600`}
+              >
+                <span>Criar nova pasta</span>
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              {data.folders ? (
+                data.folders.map(
+                  ({ id: folderId, name, description, links }) => {
+                    const quantityOfLinks = links.length;
+                    return (
+                      <FolderCard
+                        key={folderId}
+                        description={description}
+                        id={folderId}
+                        name={name}
+                        quantityOfLinks={quantityOfLinks}
+                      />
+                    );
+                  }
+                )
+              ) : (
+                <p>Ainda não existe nenhuma página</p>
+              )}
+            </div>
+          </>
         )}
         {isLoading && <p>Carregando...</p>}
         {error && <MessageErrorLoad />}

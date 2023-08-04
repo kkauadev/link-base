@@ -15,7 +15,7 @@ export const FolderCard = ({
   quantityOfLinks,
 }: FolderCardProps) => {
   return (
-    <article className="max-h-[9rem] flex flex-col justify-between relative break-words w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
+    <article className="max-h-[9rem] flex flex-col justify-between relative w-full md:max-w-[36rem] lg:w-[calc(33.3%-2.5rem)] lg:min-w-[30rem] py-4 px-5 rounded border-2 border-primary">
       <div>
         <div className="flex justify-between items-center mb-1">
           <Link

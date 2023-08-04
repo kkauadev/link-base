@@ -2,12 +2,12 @@
 
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { memo } from "react";
 
-import { DeleteFolderButton } from "@/components/buttons/delete-folder-button";
+import { Button } from "@/components/buttons/button";
 import { LinkCard } from "@/components/cards/link-card";
-import { IconPlus } from "@/components/icons";
+import { IconDelete, IconPlus } from "@/components/icons";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
 import { baseUrl } from "@/constants/base-url";
 import {
@@ -15,20 +15,33 @@ import {
   relativeDateFormatter,
 } from "@/functions/date-formatter";
 import { useGetData } from "@/hooks/get-data";
+import { deleteData } from "@/services/delete-data";
 import { Folder } from "@/types/user";
 
-export default function FolderPage() {
-  const { id: paramId } = useParams();
+type handleDeleteType = (
+  id: string | undefined,
+  token: string | undefined,
+  paramsId: string | undefined
+) => Promise<void>;
 
-  const id = Cookies.get("id");
-  const token = Cookies.get("token");
+const linkStyle =
+  "h-8 w-full flex items-center justify-center text-xl p-2 rounded transition hover:brightness-75";
+
+export default function FolderPage() {
+  const { id: routeParameterId } = useParams();
+  const { push } = useRouter();
+  const cookieId = Cookies.get("id");
+  const cookieToken = Cookies.get("token");
 
   const { data, error, isLoading } = useGetData<Folder>(
-    `${baseUrl}/folder/${paramId}`,
-    token ?? ""
+    `${baseUrl}/folder/${routeParameterId}`,
+    cookieToken ?? ""
   );
 
   const MemoizedLinkCard = memo(LinkCard);
+
+  const handleDelete: handleDeleteType = async (id = "", tk = "", prmId = "") =>
+    await deleteData({ id, token: tk }, prmId, "folders").then(() => push("/"));
 
   return (
     <>
@@ -50,8 +63,8 @@ export default function FolderPage() {
                     <MemoizedLinkCard
                       key={link.id}
                       link={link}
-                      paramsId={paramId}
-                      stored={{ token: token ?? "", id: id ?? "" }}
+                      paramsId={routeParameterId}
+                      stored={{ token: cookieToken ?? "", id: cookieId ?? "" }}
                     />
                   );
                 })
@@ -60,27 +73,29 @@ export default function FolderPage() {
             <aside className="max-w-md w-full">
               <section className="flex justify-between items-center gap-4 mb-4">
                 <Link
-                  className="w-1/2 h-[2rem] text-white bg-green-600 flex items-center justify-center text-2xl px-2 py-1 rounded transition hover:brightness-75"
+                  className={`${linkStyle} bg-green-600`}
                   href={`/link/create/${data.id}`}
                 >
                   <IconPlus />
                 </Link>
                 <Link
-                  className="h-[2rem] text-center text-white w-full bg-blue-600 px-2 py-1 rounded transition hover:brightness-75"
-                  href={`/folder/edit/${paramId}`}
+                  className={`${linkStyle} bg-blue-600`}
+                  href={`/folder/edit/${routeParameterId}`}
                 >
                   Editar
                 </Link>
-                <DeleteFolderButton
-                  id={id ?? ""}
-                  paramsId={paramId}
-                  token={token ?? ""}
-                />
+                <Button
+                  onClick={() =>
+                    handleDelete(cookieId, routeParameterId, cookieToken)
+                  }
+                  id="delete-folder-button"
+                  className="h-8 text-xl text-white bg-red-600"
+                >
+                  <IconDelete />
+                </Button>
               </section>
               <section className="text-sm sm:text-base flex flex-col gap-2 border-2 border-primary rounded p-3 sm:p-4">
-                <p className="whitespace-normal break-words w-full">
-                  {data.description}
-                </p>
+                <p className="whitespace-normal w-full">{data.description}</p>
                 <p>Total de links: {data.links.length}</p>
                 <p>
                   Data de criação: {dateFormatter(new Date(data.createDate))}
