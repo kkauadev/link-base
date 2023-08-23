@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import { FormFolders } from "@/components/forms/form-folders";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 import { useGetData } from "@/hooks/get-data";
 import { Folder } from "@/types/user";
 

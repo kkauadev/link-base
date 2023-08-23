@@ -1,7 +1,7 @@
 "use client";
 
 import { FormLink } from "@/components/forms/form-link";
-import { getUserToken } from "@/functions/get-user-token";
+import { getUserToken } from "@/utils/functions/get-user-token";
 
 export default function FolderEdit() {
   const stored = getUserToken();

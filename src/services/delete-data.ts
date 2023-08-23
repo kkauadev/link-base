@@ -1,4 +1,4 @@
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 
 export const deleteData = async (
   stored: { token: string; id: string } | undefined,

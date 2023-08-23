@@ -7,7 +7,7 @@ import { useState } from "react";
 import {
   dateFormatter,
   relativeDateFormatter,
-} from "@/functions/date-formatter";
+} from "@/utils/functions/date-formatter";
 import { deleteData } from "@/services/delete-data";
 import { Link as LinkType } from "@/types/user";
 import { IconArrowDown, IconEllipsis } from "../icons";
@@ -55,7 +55,7 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
         )}
       </div>
       <Link
-        className="text-secondary underline brightness-125 hover:brightness-100"
+        className="text-secondary underline brightness-125 hover:brightness-100 break-words"
         href={link.link || "#"}
       >
         {link.link}

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { FolderCard } from "@/components/cards/folder-card";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
 

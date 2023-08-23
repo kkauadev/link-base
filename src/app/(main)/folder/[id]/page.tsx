@@ -9,11 +9,11 @@ import { Button } from "@/components/buttons/button";
 import { LinkCard } from "@/components/cards/link-card";
 import { IconDelete, IconPlus } from "@/components/icons";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 import {
   dateFormatter,
   relativeDateFormatter,
-} from "@/functions/date-formatter";
+} from "@/utils/functions/date-formatter";
 import { useGetData } from "@/hooks/get-data";
 import { deleteData } from "@/services/delete-data";
 import { Folder } from "@/types/user";
@@ -73,13 +73,13 @@ export default function FolderPage() {
             <aside className="max-w-md w-full">
               <section className="flex justify-between items-center gap-4 mb-4">
                 <Link
-                  className={`${linkStyle} bg-green-600`}
+                  className={`${linkStyle} bg-green-600 text-[1.4rem] lg:text-lg`}
                   href={`/link/create/${data.id}`}
                 >
                   <IconPlus />
                 </Link>
                 <Link
-                  className={`${linkStyle} bg-blue-600`}
+                  className={`${linkStyle} bg-blue-600 text-[1rem] lg:text-lg`}
                   href={`/folder/edit/${routeParameterId}`}
                 >
                   Editar
@@ -89,7 +89,7 @@ export default function FolderPage() {
                     handleDelete(cookieId, routeParameterId, cookieToken)
                   }
                   id="delete-folder-button"
-                  className="h-8 text-xl text-white bg-red-600"
+                  className="h-8 text-[1.4rem] lg:text-lg text-white bg-red-600"
                 >
                   <IconDelete />
                 </Button>

@@ -1,4 +1,4 @@
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 
 export const loginRequest = async (username: string, password: string) => {
   return await fetch(`${baseUrl}/login`, {

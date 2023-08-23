@@ -1,14 +1,14 @@
 "use client";
 
-import Cookies from "js-cookie";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { IconMenu } from "@/components/icons";
-import { baseUrl } from "@/constants/base-url";
-import { useGetData } from "@/hooks/get-data";
+import { baseUrl } from "@/utils/constants/base-url";
 import { User } from "@/types/user";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useGetData } from "@/hooks/get-data";
 
 export default function MainLayout({
   children,
@@ -45,7 +45,7 @@ export default function MainLayout({
           </Link>
           <label
             htmlFor="toggle-menu-input"
-            className="label-menu text-3xl transition hover:brightness-75 hover:scale-75"
+            className="label-menu text-3xl transition hover:brightness-75"
           >
             <IconMenu />
           </label>
