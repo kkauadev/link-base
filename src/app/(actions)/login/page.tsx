@@ -9,6 +9,7 @@ import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
 import { CustomError } from "@/types/custom-error";
 import { loginRequest } from "@/services/login";
+import { ErrorMessages } from "@/utils/constants/erro-messages";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -26,16 +27,23 @@ export default function Login() {
     e.preventDefault();
     try {
       setLoadingRequest(true);
-      if (!username || !password) throw new Error("Preencha todos os campos");
+      if (
+        !username ||
+        username.length < 3 ||
+        !password ||
+        password.length < 3
+      ) {
+        throw new Error(ErrorMessages.INVALID_LOGIN);
+      }
 
       const res = await loginRequest(username, password);
 
       if (res.status === 401) {
-        throw new Error("Usuário ou senha incorretos");
+        throw new Error(ErrorMessages.INVALID_LOGIN);
       }
 
       if (!res.ok) {
-        throw new Error("Erro na solicitação. Status: " + res.status);
+        throw new Error(ErrorMessages.SERVER_ERROR);
       }
 
       const data = await res.json();
@@ -53,7 +61,7 @@ export default function Login() {
       setLoadingRequest(false);
       setError({
         error: true,
-        message: customError.message || "Usuário ou senha incorretos",
+        message: customError.message || ErrorMessages.SERVER_ERROR,
       });
     }
   };

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
-import { baseUrl } from "@/constants/base-url";
+import { baseUrl } from "@/utils/constants/base-url";
 import { CustomError } from "@/types/custom-error";
 
 export default function SignUp() {
