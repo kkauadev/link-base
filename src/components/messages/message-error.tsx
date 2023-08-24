@@ -1,24 +1,15 @@
-"use client";
-
 import { IconClose } from "../icons";
 
 interface FormButtonProps {
   message: string;
-  onCloseMap: Record<string, () => void>;
+  closeMessage: () => void;
 }
 
-export const ErrorMessage = ({ message, onCloseMap }: FormButtonProps) => {
-  const handleClose = () => {
-    const onClose = onCloseMap["show"];
-    if (onClose) {
-      onClose();
-    }
-  };
-
+export const ErrorMessage = ({ message, closeMessage }: FormButtonProps) => {
   return (
     <aside className="flex justify-center bg-red-400 text-xl rounded p-3 absolute top-16 left-[35%] right-[35%]">
       <span>{message}</span>
-      <button onClick={handleClose}>
+      <button onClick={closeMessage}>
         <IconClose />
       </button>
     </aside>

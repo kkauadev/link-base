@@ -7,9 +7,9 @@ import { useState } from "react";
 
 import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
-import { CustomError } from "@/types/custom-error";
 import { loginRequest } from "@/services/login";
 import { ErrorMessages } from "@/utils/constants/erro-messages";
+import { handlingError } from "@/utils/functions/handling-error";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -17,7 +17,6 @@ export default function Login() {
   const [loadingRequest, setLoadingRequest] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
   const [error, setError] = useState({
-    error: false,
     message: "",
   });
 
@@ -57,12 +56,7 @@ export default function Login() {
       setLoadingRequest(false);
       return;
     } catch (error) {
-      const customError: CustomError = error as CustomError;
-      setLoadingRequest(false);
-      setError({
-        error: true,
-        message: customError.message || ErrorMessages.SERVER_ERROR,
-      });
+      setError(handlingError(error));
     }
   };
 
@@ -74,11 +68,11 @@ export default function Login() {
           className="bg-inherit sm:bg-secondary w-full max-w-lg p-6 sm:p-10 pb-6 rounded"
         >
           <section className="flex flex-col gap-2 mb-2">
-            {error.error && (
+            {error.message && (
               <aside className="relative bg-red-400 p-4 flex justify-center items-center rounded">
                 <span className="text-red-900 text-lg">{error.message}</span>
                 <button
-                  onClick={() => setError({ error: false, message: "" })}
+                  onClick={() => setError({ message: "" })}
                   className="absolute right-[4%] text-red-900 text-lg hover:text-red-600 transition"
                 >
                   <IconClose />

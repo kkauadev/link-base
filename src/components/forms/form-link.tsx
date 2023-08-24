@@ -10,6 +10,8 @@ import { FormButton } from "@/components/buttons/forms-button";
 import { InputField } from "@/components/fields/input-field";
 import { TextareaField } from "@/components/fields/textarea-field";
 import { SuccessMessage } from "@/components/messages/message-success";
+import { ErrorMessage } from "../messages/message-error";
+import { handlingError } from "@/utils/functions/handling-error";
 
 interface FormFoldersProps {
   inputTitleValue?: string;
@@ -36,7 +38,6 @@ const FormLinkLocal = ({
   const { id, folderId } = useParams();
   const [error, setError] = useState({
     message: "",
-    show: false,
   });
 
   const cookies = getAllCookies();
@@ -65,22 +66,21 @@ const FormLinkLocal = ({
 
       if (!res.ok) throw new Error("Erro ao criar pasta");
 
+      setError({ message: "" });
       setSuccessMessage(true);
-
-      return;
     } catch (error) {
-      const customError: CustomError = error as CustomError;
-      setError({
-        message: customError.message,
-        show: true,
-      });
-
-      return;
+      setError(handlingError(error));
     }
   };
 
   return (
     <>
+      {error.message && (
+        <ErrorMessage
+          message={error.message}
+          closeMessage={() => setError({ message: "" })}
+        />
+      )}
       {successMessage && (
         <SuccessMessage
           message="Sucesso na ação, redirecionando..."

@@ -10,6 +10,7 @@ import { ErrorMessage } from "@/components/messages/message-error";
 import { SuccessMessage } from "@/components/messages/message-success";
 import { createOrUpdateData } from "@/services/create-data";
 import { CustomError } from "@/types/custom-error";
+import { handlingError } from "@/utils/functions/handling-error";
 
 interface FormFoldersProps {
   inputNameValue?: string;
@@ -39,7 +40,6 @@ export const FormFolders = ({
   );
   const [error, setError] = useState({
     message: "",
-    show: false,
   });
 
   const { push } = useRouter();
@@ -65,17 +65,10 @@ export const FormFolders = ({
 
       if (!res.ok) throw new Error("Erro ao criar pasta");
 
+      setError({ message: "" });
       setSuccessMessage(true);
-
-      return;
     } catch (error) {
-      const customError: CustomError = error as CustomError;
-      setError({
-        message: customError.message,
-        show: true,
-      });
-
-      return;
+      setError(handlingError(error));
     }
   };
 
@@ -94,16 +87,10 @@ export const FormFolders = ({
           }}
         />
       )}
-      {error.show && (
+      {error.message && (
         <ErrorMessage
           message={error.message}
-          onCloseMap={{
-            show: () =>
-              setError({
-                message: "",
-                show: false,
-              }),
-          }}
+          closeMessage={() => setError({ message: "" })}
         />
       )}
       <form

@@ -3,9 +3,8 @@
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { memo } from "react";
+import { memo, useState } from "react";
 
-import { Button } from "@/components/buttons/button";
 import { LinkCard } from "@/components/cards/link-card";
 import { IconDelete, IconPlus } from "@/components/icons";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
@@ -17,6 +16,8 @@ import {
 import { useGetData } from "@/hooks/get-data";
 import { deleteData } from "@/services/delete-data";
 import { Folder } from "@/types/user";
+import { Button } from "@/components/buttons/button";
+import { ConfirmActionCard } from "@/components/cards/confirm-action-card";
 
 type handleDeleteType = (
   id: string | undefined,
@@ -28,6 +29,7 @@ const linkStyle =
   "h-8 w-full flex items-center justify-center text-xl p-2 rounded transition hover:brightness-75";
 
 export default function FolderPage() {
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const { id: routeParameterId } = useParams();
   const { push } = useRouter();
   const cookieId = Cookies.get("id");
@@ -40,15 +42,18 @@ export default function FolderPage() {
 
   const MemoizedLinkCard = memo(LinkCard);
 
-  const handleDelete: handleDeleteType = async (id = "", tk = "", prmId = "") =>
-    await deleteData({ id, token: tk }, prmId, "folders").then(() => push("/"));
-
+  const handleDelete: handleDeleteType = async (id, tk, prmId) => {
+    if (id && tk && prmId)
+      await deleteData({ id, token: tk }, prmId, "folders").then(() =>
+        push("/")
+      );
+  };
   return (
     <>
       {data && (
         <>
           <h1 className="sm:w-[calc(50vw-3.5rem)] text-xl sm:text-3xl">
-            Pasta {data?.name}
+            Pasta {data.name}
           </h1>
           <section className="flex flex-col-reverse items-center lg:items-stretch lg:flex-row gap-4 mt-6 sm:mt-10 mb-5">
             <ul className="flex flex-col gap-4 w-full sm:pr-6">
@@ -85,9 +90,7 @@ export default function FolderPage() {
                   Editar
                 </Link>
                 <Button
-                  onClick={() =>
-                    handleDelete(cookieId, routeParameterId, cookieToken)
-                  }
+                  onClick={() => setDeleteModalIsOpen((prev) => !prev)}
                   id="delete-folder-button"
                   className="h-8 text-[1.4rem] lg:text-lg text-white bg-red-600"
                 >
@@ -111,6 +114,13 @@ export default function FolderPage() {
       )}
       {isLoading && <p>Carregando...</p>}
       {error && <MessageErrorLoad />}
+      <ConfirmActionCard
+        handleConfirm={() => {
+          handleDelete(cookieId, cookieToken, routeParameterId);
+        }}
+        handleClose={() => setDeleteModalIsOpen(false)}
+        isModalOpen={deleteModalIsOpen}
+      />
     </>
   );
 }

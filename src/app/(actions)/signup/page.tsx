@@ -7,7 +7,7 @@ import { useState } from "react";
 import { FormInput } from "@/components/forms/form-input";
 import { IconClose } from "@/components/icons";
 import { baseUrl } from "@/utils/constants/base-url";
-import { CustomError } from "@/types/custom-error";
+import { handlingError } from "@/utils/functions/handling-error";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -15,7 +15,6 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [error, setError] = useState({
-    error: false,
     message: "",
   });
 
@@ -68,11 +67,7 @@ export default function SignUp() {
 
       return push("/login");
     } catch (error) {
-      const customError: CustomError = error as CustomError;
-      setError({
-        error: true,
-        message: customError.message || "Ocorrreu um erro inesperado",
-      });
+      setError(handlingError(error));
     }
   };
 
@@ -103,11 +98,11 @@ export default function SignUp() {
             </ul>
           </section>
           <section className="flex flex-col gap-2 mb-2">
-            {error.error && (
+            {error.message && (
               <aside className="relative bg-red-400 p-4 flex justify-center items-center rounded">
                 <span className="text-white text-center">{error.message}</span>
                 <button
-                  onClick={() => setError({ error: false, message: "" })}
+                  onClick={() => setError({ message: "" })}
                   className="absolute right-[4%]"
                 >
                   <IconClose className="text-white" />
