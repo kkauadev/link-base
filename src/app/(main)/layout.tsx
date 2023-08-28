@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IconMenu } from "@/components/icons";
 import { baseUrl } from "@/utils/constants/base-url";
@@ -17,21 +17,31 @@ export default function MainLayout({
 }) {
   const { refresh } = useRouter();
 
+  const [viewMenu, setViewMenu] = useState(false);
+  const refOptionsMenu = useRef<HTMLDivElement>(null);
+
   const id = Cookies.get("id");
   const token = Cookies.get("token");
 
-  const { data, error } = useGetData<User>(
+  const { data, isError } = useGetData<User>(
     `${baseUrl}/user/${id}`,
     token ?? ""
   );
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
       Cookies.remove("token");
       Cookies.remove("id");
       refresh();
     }
-  }, [error, refresh]);
+  }, [isError, refresh]);
+
+  document.addEventListener("mousedown", (e) => {
+    if (refOptionsMenu.current?.contains(e.target as Node)) {
+      return;
+    }
+    setViewMenu(false);
+  });
 
   return (
     <>
@@ -43,40 +53,41 @@ export default function MainLayout({
           >
             Home
           </Link>
-          <label
-            htmlFor="toggle-menu-input"
+          <button
+            onClick={() => setViewMenu((prev) => !prev)}
             className="label-menu text-3xl transition hover:brightness-75"
           >
             <IconMenu />
-          </label>
-          <input
-            name="toggle-menu-input"
-            id="toggle-menu-input"
-            type="checkbox"
-            className="toggle-menu"
-          />
-          <div
-            className={`menu z-10 border-2 border-primary flex-col gap-4 mt-4 bg-secondary p-4 px-2 rounded-md`}
-          >
-            <div className="bg-tertiary p-2 rounded">
-              <span className="text-sm cursor-default">Perfil</span>
-              <h2 className="text-2xl cursor-default w-full text-ellipsis">
-                {data?.name}
-              </h2>
+          </button>
+          {viewMenu && (
+            <div
+              ref={refOptionsMenu}
+              className={`absolute top-10 md:right-[5rem] z-10 border-2 border-primary flex-col gap-4 mt-4 bg-secondary p-4 px-2 rounded-md`}
+            >
+              {data ? (
+                <div className="bg-tertiary p-2 rounded">
+                  <span className="text-sm cursor-default">Perfil</span>
+                  <h2 className="text-2xl cursor-default w-full text-ellipsis">
+                    {data?.name}
+                  </h2>
+                </div>
+              ) : (
+                <div className="h-16 bg-tertiary p-2 rounded animate-pulse" />
+              )}
+              <Link
+                className="py-2 block text-xl px-2 transition hover:brightness-75"
+                href="/"
+              >
+                Minhas pastas
+              </Link>
+              <Link
+                className="block text-xl px-2 transition hover:brightness-75"
+                href="/logout"
+              >
+                Sair
+              </Link>
             </div>
-            <Link
-              className="py-2 block text-xl px-2 transition hover:brightness-75"
-              href="/"
-            >
-              Minhas pastas
-            </Link>
-            <Link
-              className="block text-xl px-2 transition hover:brightness-75"
-              href="/logout"
-            >
-              Sair
-            </Link>
-          </div>
+          )}
         </nav>
       </header>
       <main className="bg-secondary w-full px-4 py-2 sm:px-14 sm:py-8 min-h-screen">

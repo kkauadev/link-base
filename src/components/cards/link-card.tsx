@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import {
   dateFormatter,
@@ -25,6 +25,14 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
   const [viewDescription, setViewDescription] = useState(false);
   const [viewOptions, setViewOptions] = useState(false);
   const { refresh } = useRouter();
+  const refOptionsMenu = useRef<HTMLUListElement>(null);
+
+  document.addEventListener("mousedown", (e) => {
+    if (refOptionsMenu.current?.contains(e.target as Node)) {
+      return;
+    }
+    setViewOptions(false);
+  });
 
   return (
     <li className="max-w-5xl w-full bg-tertiary p-4 rounded">
@@ -37,7 +45,10 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
           <IconEllipsis />
         </button>
         {viewOptions && (
-          <ul className="bg-secondary absolute top-6 right-0 p-2 rounded shadow z-20">
+          <ul
+            ref={refOptionsMenu}
+            className="bg-secondary absolute top-6 right-0 p-2 rounded shadow z-20"
+          >
             <li className="flex items-center gap-2">
               <Link href={`/link/edit/${paramsId}/${link.id}` || "#"}>
                 <button className="text-white">Editar</button>
