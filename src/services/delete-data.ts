@@ -7,10 +7,10 @@ export const deleteData = async (
   response?: () => void
 ) => {
   if (!stored) return console.log("Não há token");
-  await fetch(`${baseUrl}/${type}/delete/${stored.token}`, {
+  await fetch(`${baseUrl}/${type}/delete/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${id}`,
+      Authorization: `Bearer ${stored.token}`,
     },
   }).then((res) => {
     if (res.ok) {

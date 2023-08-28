@@ -1,7 +1,11 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-export const MessageErrorLoad = () => {
+interface MessageErrorLoadProps {
+  isOpen: boolean;
+}
+
+export const MessageErrorLoad = ({ isOpen }: MessageErrorLoadProps) => {
   const { push } = useRouter();
 
   const handleClick = () => {
@@ -12,9 +16,13 @@ export const MessageErrorLoad = () => {
   };
 
   return (
-    <div>
-      <p>Erro ao carregar dados</p>
-      <button onClick={() => handleClick()}>Faça login</button>
-    </div>
+    <>
+      {isOpen && (
+        <div>
+          <p>Erro ao carregar dados</p>
+          <button onClick={() => handleClick()}>Faça login</button>
+        </div>
+      )}
+    </>
   );
 };

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 export const useGetData = <T>(url: string, token: string) => {
   const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -20,15 +20,15 @@ export const useGetData = <T>(url: string, token: string) => {
 
         setData(await res.json());
         setIsLoading(false);
-        setError(false);
+        setIsError(false);
       } catch (error) {
         setData(null);
         setIsLoading(false);
-        setError(true);
+        setIsError(true);
       }
     };
     getData();
   }, [url, token]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, isError };
 };

@@ -18,6 +18,7 @@ import { deleteData } from "@/services/delete-data";
 import { Folder } from "@/types/user";
 import { Button } from "@/components/buttons/button";
 import { ConfirmActionCard } from "@/components/cards/confirm-action-card";
+import { LoadingCard } from "@/components/cards/loading-card";
 
 type handleDeleteType = (
   id: string | undefined,
@@ -35,7 +36,7 @@ export default function FolderPage() {
   const cookieId = Cookies.get("id");
   const cookieToken = Cookies.get("token");
 
-  const { data, error, isLoading } = useGetData<Folder>(
+  const { data, isError, isLoading } = useGetData<Folder>(
     `${baseUrl}/folder/${routeParameterId}`,
     cookieToken ?? ""
   );
@@ -112,8 +113,14 @@ export default function FolderPage() {
           </section>
         </>
       )}
-      {isLoading && <p>Carregando...</p>}
-      {error && <MessageErrorLoad />}
+      <LoadingCard
+        className="flex-col gap-4 w-2/3 pt-20 sm:pr-6"
+        isLoading={isLoading}
+        quantity={4}
+      >
+        <div className="h-32 max-w-5xl w-full brightness-75 bg-tertiary p-4 rounded" />
+      </LoadingCard>
+      <MessageErrorLoad isOpen={isError} />
       <ConfirmActionCard
         handleConfirm={() => {
           handleDelete(cookieId, cookieToken, routeParameterId);

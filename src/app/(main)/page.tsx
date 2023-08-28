@@ -8,11 +8,12 @@ import { MessageErrorLoad } from "@/components/messages/message-error-load";
 import { baseUrl } from "@/utils/constants/base-url";
 import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
+import { LoadingCard } from "@/components/cards/loading-card";
 
 export default function Home() {
   const id = Cookies.get("id");
   const token = Cookies.get("token");
-  const { data, error, isLoading } = useGetData<User>(
+  const { data, isError, isLoading } = useGetData<User>(
     `${baseUrl}/user/${id}`,
     token ?? ""
   );
@@ -56,9 +57,15 @@ export default function Home() {
             </div>
           </>
         )}
-        {isLoading && <p>Carregando...</p>}
-        {error && <MessageErrorLoad />}
       </section>
+      <LoadingCard
+        className="flex-col md:flex-row w-full flex-wrap mt-10 mb-5 gap-4"
+        isLoading={isLoading}
+        quantity={6}
+      >
+        <div className="bg-tertiary h-28 flex flex-row justify-between w-full md:w-[36rem] lg:w-[31.2rem] py-4 px-5 rounded" />
+      </LoadingCard>
+      <MessageErrorLoad isOpen={isError} />
     </>
   );
 }
