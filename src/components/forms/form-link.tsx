@@ -5,7 +5,6 @@ import { memo, useState } from "react";
 
 import { getAllCookies } from "@/utils/functions/get-cookies";
 import { createOrUpdateData } from "@/services/create-data";
-import { CustomError } from "@/types/custom-error";
 import { FormButton } from "@/components/buttons/forms-button";
 import { InputField } from "@/components/fields/input-field";
 import { TextareaField } from "@/components/fields/textarea-field";

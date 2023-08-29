@@ -13,8 +13,8 @@ export const deleteData = async (
       Authorization: `Bearer ${stored.token}`,
     },
   }).then((res) => {
-    if (res.ok) {
-      response && response();
+    if (res.ok && response) {
+      response();
     }
   });
 };

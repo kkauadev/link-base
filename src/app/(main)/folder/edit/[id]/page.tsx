@@ -13,7 +13,7 @@ export default function FolderEdit() {
   const { id } = useParams();
   const token = Cookies.get("token");
 
-  const { data, error, isLoading } = useGetData<Folder>(
+  const { data, isError, isLoading } = useGetData<Folder>(
     `${baseUrl}/folder/${id}`,
     token ?? ""
   );
@@ -32,7 +32,7 @@ export default function FolderEdit() {
         />
       )}
       {isLoading && <p>Carregando...</p>}
-      {error && <MessageErrorLoad />}
+      <MessageErrorLoad isOpen={isError} />
     </>
   );
 }
