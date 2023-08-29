@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import {
   dateFormatter,
@@ -29,14 +29,20 @@ export const LinkCard = ({ link, paramsId, stored }: LinkCardProps) => {
   const { refresh } = useRouter();
   const refOptionsMenu = useRef<HTMLUListElement>(null);
 
-  const closeModal = (e: MouseEvent) => {
-    if (refOptionsMenu.current?.contains(e.target as Node)) {
-      return;
-    }
-    setViewOptions(false);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (refOptionsMenu.current?.contains(event.target as Node)) {
+        return;
+      }
+      setViewOptions(false);
+    };
 
-  document.addEventListener("mousedown", closeModal);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setViewOptions]);
 
   return (
     <>

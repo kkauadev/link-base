@@ -36,12 +36,20 @@ export default function MainLayout({
     }
   }, [isError, refresh]);
 
-  document.addEventListener("mousedown", (e) => {
-    if (refOptionsMenu.current?.contains(e.target as Node)) {
-      return;
-    }
-    setViewMenu(false);
-  });
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (refOptionsMenu.current?.contains(event.target as Node)) {
+        return;
+      }
+      setViewMenu(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setViewMenu]);
 
   return (
     <>
