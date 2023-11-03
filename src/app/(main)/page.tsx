@@ -2,21 +2,43 @@
 
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { CgSearch as IconSearch } from "react-icons/cg";
 
 import { FolderCard } from "@/components/cards/folder-card";
+import { LoadingCard } from "@/components/cards/loading-card";
 import { MessageErrorLoad } from "@/components/messages/message-error-load";
-import { baseUrl } from "@/utils/constants/base-url";
 import { useGetData } from "@/hooks/get-data";
 import { User } from "@/types/user";
-import { LoadingCard } from "@/components/cards/loading-card";
+import { baseUrl } from "@/utils/constants/base-url";
 
 export default function Home() {
   const id = Cookies.get("id");
   const token = Cookies.get("token");
+  const [toggleInputSearch, setToggleInputSearch] = useState(false);
+  const [dataFolders, setDataFolders] = useState<User["folders"]>([]);
   const { data, isError, isLoading } = useGetData<User>(
     `${baseUrl}/user/${id}`,
     token ?? ""
   );
+
+  useEffect(() => {
+    if (data?.folders) {
+      setDataFolders(data.folders);
+    }
+  }, [data?.folders]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!data?.folders) return;
+    const searchTerm = e.target.value.toLowerCase();
+
+    if (searchTerm.trim() === "") return setDataFolders(data?.folders);
+
+    const dataFiltered = data?.folders.filter((folder) =>
+      folder.name.toLowerCase().includes(searchTerm)
+    );
+    setDataFolders(dataFiltered);
+  };
 
   return (
     <>
@@ -26,7 +48,7 @@ export default function Home() {
       <section className="flex flex-col gap-4 mt-10 mb-5">
         {data && (
           <>
-            <div>
+            <div className="flex justify-between items-center">
               <Link
                 role={"button"}
                 href={`/folder/create/${id}`}
@@ -34,10 +56,25 @@ export default function Home() {
               >
                 <span>Criar nova pasta</span>
               </Link>
+              <div className="flex gap-4">
+                {toggleInputSearch ? (
+                  <input
+                    onChange={handleSearch}
+                    className="bg-tertiary outline-none border-2 border-secondary active:border-gray-500  focus:border-gray-500 rounded px-2 py-1 w-[20rem]"
+                    type="text"
+                  />
+                ) : null}
+                <button
+                  onClick={() => setToggleInputSearch((e) => !e)}
+                  className="text-2xl hover:brightness-50 transition-all duration-200"
+                >
+                  <IconSearch />
+                </button>
+              </div>
             </div>
             <div className="flex flex-wrap gap-4">
-              {data.folders ? (
-                data.folders.map(
+              {dataFolders && dataFolders.length > 0 ? (
+                dataFolders.map(
                   ({ id: folderId, name, description, links }) => {
                     const quantityOfLinks = links.length;
                     return (

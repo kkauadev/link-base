@@ -26,8 +26,22 @@ type handleDeleteType = (
   paramsId: string | undefined
 ) => Promise<void>;
 
-const linkStyle =
-  "h-8 w-full flex items-center justify-center text-xl p-2 rounded transition hover:brightness-75";
+type ActionButtonProps = {
+  children: React.ReactNode;
+  className?: string;
+  href: string;
+};
+
+const ActionButton = ({ children, className, href }: ActionButtonProps) => {
+  return (
+    <Link
+      className={`h-8 w-full flex items-center justify-center text-xl p-2 rounded transition hover:brightness-75 ${className}`}
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+};
 
 export default function FolderPage() {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
@@ -41,6 +55,8 @@ export default function FolderPage() {
     cookieToken ?? ""
   );
 
+  console.log(data);
+
   const MemoizedLinkCard = memo(LinkCard);
 
   const handleDelete: handleDeleteType = async (id, tk, prmId) => {
@@ -49,8 +65,25 @@ export default function FolderPage() {
         push("/")
       );
   };
+
   return (
     <>
+      <MessageErrorLoad isOpen={isError} />
+      <LoadingCard
+        className="flex-col gap-4 w-2/3 pt-20 sm:pr-6"
+        isLoading={isLoading}
+        quantity={4}
+      >
+        <div className="h-32 max-w-5xl w-full brightness-75 bg-tertiary p-4 rounded" />
+      </LoadingCard>
+
+      <ConfirmActionCard
+        handleConfirm={() => {
+          handleDelete(cookieId, cookieToken, routeParameterId);
+        }}
+        handleClose={() => setDeleteModalIsOpen(false)}
+        isModalOpen={deleteModalIsOpen}
+      />
       {data && (
         <>
           <h1 className="sm:w-[calc(50vw-3.5rem)] text-xl sm:text-3xl">
@@ -58,13 +91,13 @@ export default function FolderPage() {
           </h1>
           <section className="flex flex-col-reverse items-center lg:items-stretch lg:flex-row gap-4 mt-6 sm:mt-10 mb-5">
             <ul className="flex flex-col gap-4 w-full sm:pr-6">
-              {data.links.length === 0 ? (
+              {data.links && data.links.length === 0 ? (
                 <li className="text-xl">
                   Nenhum link adicionado a pasta <strong>{data.name}</strong>{" "}
                   ainda
                 </li>
               ) : (
-                data.links.map((link) => {
+                data?.links?.map((link) => {
                   return (
                     <MemoizedLinkCard
                       key={link.id}
@@ -78,18 +111,18 @@ export default function FolderPage() {
             </ul>
             <aside className="max-w-md w-full">
               <section className="flex justify-between items-center gap-4 mb-4">
-                <Link
-                  className={`${linkStyle} bg-green-600 text-[1.4rem] lg:text-lg`}
+                <ActionButton
+                  className="bg-green-600 text-[1.4rem] lg:text-lg"
                   href={`/link/create/${data.id}`}
                 >
                   <IconPlus />
-                </Link>
-                <Link
-                  className={`${linkStyle} bg-blue-600 text-[1rem] lg:text-lg`}
+                </ActionButton>
+                <ActionButton
+                  className="bg-blue-600 text-[1rem] lg:text-lg"
                   href={`/folder/edit/${routeParameterId}`}
                 >
                   Editar
-                </Link>
+                </ActionButton>
                 <Button
                   onClick={() => setDeleteModalIsOpen((prev) => !prev)}
                   id="delete-folder-button"
@@ -100,7 +133,7 @@ export default function FolderPage() {
               </section>
               <section className="text-sm sm:text-base flex flex-col gap-2 border-2 border-primary rounded p-3 sm:p-4">
                 <p className="whitespace-normal w-full">{data.description}</p>
-                <p>Total de links: {data.links.length}</p>
+                <p>Total de links: {data?.links?.length}</p>
                 <p>
                   Data de criação: {dateFormatter(new Date(data.createDate))}
                 </p>
@@ -113,21 +146,6 @@ export default function FolderPage() {
           </section>
         </>
       )}
-      <LoadingCard
-        className="flex-col gap-4 w-2/3 pt-20 sm:pr-6"
-        isLoading={isLoading}
-        quantity={4}
-      >
-        <div className="h-32 max-w-5xl w-full brightness-75 bg-tertiary p-4 rounded" />
-      </LoadingCard>
-      <MessageErrorLoad isOpen={isError} />
-      <ConfirmActionCard
-        handleConfirm={() => {
-          handleDelete(cookieId, cookieToken, routeParameterId);
-        }}
-        handleClose={() => setDeleteModalIsOpen(false)}
-        isModalOpen={deleteModalIsOpen}
-      />
     </>
   );
 }
