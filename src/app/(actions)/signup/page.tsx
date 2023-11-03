@@ -62,6 +62,8 @@ export default function SignUp() {
       });
 
       if (!res.ok) {
+        if (res.status === 409)
+          throw new Error("Usuário já cadastrado. Tente outro nome.");
         throw new Error("Erro na solicitação. Status: " + res.status);
       }
 
