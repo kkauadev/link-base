@@ -47,12 +47,16 @@ export default function Login() {
 
       const data = await res.json();
 
+      if (data.auth === false) {
+        throw new Error(ErrorMessages.INVALID_LOGIN);
+      }
+      route.push("/");
+
       Cookies.remove("token");
       Cookies.remove("id");
       Cookies.set("token", data.token, { expires: new Date().getHours() + 1 });
       Cookies.set("id", data.id);
 
-      route.push("/");
       setLoadingRequest(false);
       return;
     } catch (error) {

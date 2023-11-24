@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 
 import { IconMenu } from "@/components/icons";
 import { baseUrl } from "@/utils/constants/base-url";
@@ -54,7 +54,7 @@ export default function MainLayout({
   return (
     <>
       <header className="bg-secondary">
-        <nav className="w-full sm:absolute right-0 sm:w-[50vw] flex items-center justify-end gap-4 sm:gap-8 pt-4 pb-2 sm:py-6 px-4 sm:px-14">
+        <nav className="w-full right-0 flex items-center justify-end gap-4 sm:gap-8 pt-4 pb-2 sm:pt-6 sm:pb-2 px-4 sm:px-14">
           <Link
             href="/"
             className="text-lg sm:text-xl transition hover:brightness-75"
@@ -70,14 +70,16 @@ export default function MainLayout({
           {viewMenu && (
             <div
               ref={refOptionsMenu}
-              className={`absolute top-10 md:right-[5rem] z-10 border-2 border-primary flex-col gap-4 mt-4 bg-secondary p-4 px-2 rounded-md`}
+              className={`w-96 absolute top-10 md:right-[5rem] z-10 border-2 border-primary flex-col gap-4 mt-4 bg-secondary p-4 px-2 rounded-md`}
             >
               {data ? (
-                <div className="bg-tertiary p-2 rounded">
-                  <span className="text-sm cursor-default">Perfil</span>
-                  <h2 className="text-2xl cursor-default w-full text-ellipsis">
-                    {data?.name}
-                  </h2>
+                <div className="bg-tertiary p-2 rounded flex items-center gap-2">
+                  {/* <Link href={`/${data.name}`} className="flex gap-5"> */}
+                  <Link href={`/`} className="flex gap-5">
+                    <span className="text-2xl w-full text-ellipsis">
+                      {data?.name}
+                    </span>
+                  </Link>
                 </div>
               ) : (
                 <div className="h-16 bg-tertiary p-2 rounded animate-pulse" />

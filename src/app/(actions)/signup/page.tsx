@@ -11,6 +11,8 @@ import { handlingError } from "@/utils/functions/handling-error";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
@@ -23,7 +25,7 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (!username || !password || !confirmPassword)
+      if (!username || !name || !email || !password || !confirmPassword)
         throw new Error("Preencha todos os campos");
 
       if (password !== confirmPassword)
@@ -56,7 +58,9 @@ export default function SignUp() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: username,
+          username,
+          name,
+          email,
           password,
         }),
       });
@@ -116,6 +120,28 @@ export default function SignUp() {
               <FormInput
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
+                type="text"
+                name="username-input"
+                id="username-input"
+                data-cy="signup-username-input"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="username-input">Nome</label>
+              <FormInput
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                type="text"
+                name="username-input"
+                id="username-input"
+                data-cy="signup-username-input"
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="username-input">Email</label>
+              <FormInput
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 type="text"
                 name="username-input"
                 id="username-input"
