@@ -2,19 +2,31 @@
 
 <div>
   <p>
-    Este é um projeto desenvolvido com o intuito de mostrar meus conhecimentos de criação e manutenção de aplicações web, isso é desde o front-end até o deploy.
+    Você já sentiu falta de ter seus links salvos de forma organizada e acessível a qualquer momento? O Link Base é a solução que você precisa!
+    Nosso objetivo é simplificar sua vida, mantendo todos os seus links importantes guardados em um único lugar. Com seu login seguro, tenha acesso a eles de qualquer dispositivo, a qualquer hora.
   </p>
-  <a style={'margin-left: 10px'} href="https://link-base-jlthdhwf3-kato2004.vercel.app/" target="_blank">
-    Veja funcionando agora
-  </a>
+  <p>
+    <a href="https://link-base.vercel.app" target="_blank">
+      Veja funcionando agora
+    </a>
+  </p>
+  <p>
+    Este é um projeto desenvolvido com o intuito de mostrar meus conhecimentos de criação e manutenção de aplicações web, desde o front-end até o deploy.
+  </p>
 </div>
 
 <div>
   <h2>Tecnologias utilizadas</h2>
   <ul>
-    <li>Next</li>
-    <li>Typescript</li>
-    <li>Cypress</li>
+    <li>
+      Projeto escrito com typescript utilizando o framework Next.
+    </li>
+    <li>
+      Cypress foi utilado para criar os testes E2E.
+    </li>
+    <li>
+      Deploy do front-end feito na Vercel.
+    </li>
   <ul>
 </div>
 
